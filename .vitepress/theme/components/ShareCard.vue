@@ -49,7 +49,7 @@
               <img className="rounded-lg" src="./img/npm.svg" alt="" />
             </div>
             <div className="flex justify-center flex-shrink-0 w-20 h-20 p-4 bg-indigo-200 rounded-lg">
-              <img className="rounded-lg" src="./img/nest.png" alt="" />
+              <img className="rounded-lg" src="./img/java.svg" alt="" />
             </div>
             <div className="flex justify-center flex-shrink-0 w-20 h-20 p-4 rounded-lg bg-emerald-200">
               <img src="./img/vue.svg" alt="vue.js" />
@@ -76,7 +76,7 @@
               <img className="rounded-lg" src="./img/npm.svg" alt="" />
             </div>
             <div className="flex justify-center flex-shrink-0 w-20 h-20 p-4 bg-indigo-200 rounded-lg">
-              <img className="rounded-lg" src="./img/nest.png" alt="" />
+              <img className="rounded-lg" src="./img/java.svg" alt="" />
             </div>
           </div>
         </div>
