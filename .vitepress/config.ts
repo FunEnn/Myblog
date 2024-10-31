@@ -8,6 +8,7 @@ async function config() {
     lang: "en-US",
     title: "FunEnn",
     description: "Home of FunEnn",
+    base: "/Myblog/",
     head: [
       [
         "link",
