@@ -9,6 +9,7 @@ async function config() {
     title: "FunEnn",
     description: "Home of FunEnn",
     base: "/Myblog/",
+    ignoreDeadLinks: true, // 或 'localhostLinks'
     head: [
       [
         "link",
