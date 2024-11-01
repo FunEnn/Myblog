@@ -28,6 +28,7 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "gitalk": "^1.8.0"
+    "gitalk": "^1.8.0",
+    "lodash-es": "^4.17.21"
   }
 }

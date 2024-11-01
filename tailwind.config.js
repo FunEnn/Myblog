@@ -1,12 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./docs/**/*.js",
-    "./docs/**/*.vue",
-    "./docs/**/*.ts",
-    "./docs/**/*.md",
-  ],
-  options: {
-    safelist: ["html", "body"],
+  content: [".vitepress/**/*.{vue,js}", "./docs/**/*.md"],
+  theme: {
+    extend: {
+      colors: {
+        VPLight: "#3451b2",
+        VPDark: "#a8b1ff",
+      },
+    },
   },
+  plugins: [],
+  darkMode: "class",
 };
