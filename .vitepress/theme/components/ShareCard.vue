@@ -36,7 +36,7 @@
             <div class="flex justify-center flex-shrink-0 w-20 h-20 p-4 rounded-lg bg-slate-200">
               <img src="./img/tailwind.svg" alt="" />
             </div>
-            <div class="flex justify-center w-20 h-20 p-4 flex-shrink-0 rounded-lg bg-yellow">
+            <div class="flex justify-center w-20 h-20 p-4 flex-shrink-0 rounded-lg bg-[#f7cb4f]">
               <img class="rounded-lg" src="./img/js.webp" alt="" />
             </div>
             <div class="flex justify-center flex-shrink-0 w-20 h-20 p-4 bg-red-400 rounded-lg">
@@ -63,7 +63,7 @@
             <div class="flex justify-center flex-shrink-0 w-20 h-20 p-4 rounded-lg bg-slate-200">
               <img src="./img/tailwind.svg" alt="" />
             </div>
-            <div class="flex justify-center w-20 h-20 p-4 flex-shrink-0 rounded-lg bg-yellow">
+            <div class="flex justify-center w-20 h-20 p-4 flex-shrink-0 rounded-lg bg-[#f7cb4f]">
               <img class="rounded-lg" src="./img/js.webp" alt="" />
             </div>
             <div class="flex justify-center flex-shrink-0 w-20 h-20 p-4 bg-red-400 rounded-lg">
