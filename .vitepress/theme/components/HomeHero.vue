@@ -7,17 +7,17 @@
       <div class="absolute">
         <img :src="theme.avator" width="150" height="150" class="avator" />
       </div>
-      <p style="left: 55%; top: 14%;"
-        class="tag-bounce hidden sm:block sm:left-[69%] md:left-[66%] lg:left-[63%] xl:left-[60%] absolute px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
+      <p
+        class="tag-bounce block absolute left-[70%] sm:left-[69%] md:left-[66%] lg:left-[63%] xl:left-[55%] xl:top-[12%] top-[10%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
         🌟 前端开发
       </p>
-      <p style="top: 14%; left: 34%;"
-        class="tag-bounce hidden sm:block sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[27%] absolute px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
-        🌙 后端开发 
+      <p
+        class="tag-bounce block absolute left-[0%] sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[37%] xl:top-[12%] top-[10%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
+        🌙 后端开发
       </p>
-      <p style="top: 18%; left: 34%;"
-        class="tag-bounce hidden sm:block sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[27%] absolute px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
-        ✨ Coding with dream
+      <p
+        class="tag-bounce block absolute left-[0%] sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[37%] xl:top-[16%] top-[14%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
+        ✨ 热爱生活
       </p>
     </div>
   </div>
