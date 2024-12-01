@@ -46,6 +46,49 @@ BFC 原理，渲染规则：
 
 利用 BFC 的这一个原理就可以实现两栏布局，左边定宽，右边自适应。不会相互影响，哪怕高度不相等。BFC 的区域不会和浮动区域重叠，所以就可以把侧边栏固定宽度且左浮动，而对右侧内容触发 BFC，使得它的宽度自适应该行剩余宽度。
 
+### 1. 使用浮动（Float）
+
+```css
+.container {
+  width: 100%;
+}
+
+.main-content {
+  float: left;
+  width: 60%;
+}
+
+.sidebar {
+  float: right;
+  width: 40%;
+}
+```
+
+### 2. 使用Flexbox
+
+```css
+.container {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.sidebar {
+  flex: 0 0 300px; /* 侧边栏宽度固定，但可以根据需要调整 */
+}
+```
+
+### 3. 使用Grid布局
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* 主栏占3份，侧边栏占1份 */
+}
+```
+
 ### 解决垂直外边距重叠问题
 
 防止垂直 margin 合并
