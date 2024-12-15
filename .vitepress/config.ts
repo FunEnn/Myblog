@@ -16,7 +16,7 @@ async function config() {
         {
           rel: "icon",
           type: "image/svg",
-          href: "/avator.svg",
+          href: "../public/avator.svg",
         },
       ],
       [
@@ -45,8 +45,8 @@ async function config() {
     lastUpdated: false,
     themeConfig: {
       // repo: "clark-cui/homeSite",
-      logo: "./avator.svg",
-      avator: "./avator.svg",
+      logo: "/avator.svg",
+      avator: "/avator.svg",
       search: {
         provider: "local",
       },
@@ -68,13 +68,11 @@ async function config() {
           text: "📃Archives",
           link: "/archives",
         },
-
       ],
       socialLinks: [{ icon: "github", link: "https://github.com/FunEnn" }],
       // outline: 2, //设置右侧aside显示层级
       aside: false,
       // blogs page show firewokrs animation
-      
     },
     buildEnd: buildBlogRSS,
     markdown: {
