@@ -134,6 +134,14 @@ display 属性指定了元素的显示类型，它包含两类基础特征，用
 
 [flexbox（弹性盒布局模型）,以及适用场景?](https://mp.weixin.qq.com/s/OORqq5uK8jgjDV2Hkx0baA)
 
+> `flex: 1;`
+>
+> 当你写 `flex: 1;` 时，你实际上是在设置以下三个属性：
+>
+> - `flex-grow: 1;`：允许元素增长来占据flex容器中未使用的空间。
+> - `flex-shrink: 1;`：允许元素缩小以适应flex容器。
+> - `flex-basis: 0;`：元素的初始大小（在分配多余空间之前的大小）是0。
+
 Flex 布局是一种一维的布局，一个 flexbox 一次只能处理一个维度上的元素布局，一行或者一列。 作为对比的是另外一个二维布局 CSS Grid Layout（CSS栅格布局），可以同时处理行和列上的布局。
 
 我们把一个容器的 display 属性值改为 flex 或者 inline-flex。容器中的直系子元素就会变为 flex 元素。

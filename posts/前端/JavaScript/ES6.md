@@ -27,7 +27,7 @@ const name = 'Kimi';
 const greeting = `Hello, ${name}!`;
 ```
 
-### 4. 展开运算符
+### 4. 扩展运算符
 
 ```javascript
 const numbers = [1, 2, 3];
