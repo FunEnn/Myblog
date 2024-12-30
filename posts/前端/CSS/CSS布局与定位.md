@@ -136,6 +136,8 @@ display 属性指定了元素的显示类型，它包含两类基础特征，用
 
 > `flex: 1;`
 >
+> **flex为一个复合属性，它是由flex-grow、flex-shrink、flex-basis三个值组成的**
+>
 > 当你写 `flex: 1;` 时，你实际上是在设置以下三个属性：
 >
 > - `flex-grow: 1;`：允许元素增长来占据flex容器中未使用的空间。

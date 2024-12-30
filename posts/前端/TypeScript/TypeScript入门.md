@@ -27,15 +27,22 @@ JavaScript 的类型系统非常弱，而且没有使用限制，运算符可以
 
 #### 基本类型
 
-| 类型      | 定义                                                         |
-| --------- | ------------------------------------------------------------ |
-| string    | `<br>const type1 : string = '123';<br>`                      |
-| number    | `<br>const type2 : number = 123;<br>`                        |
-| boolean   | `<br>const type3 : boolean = true;<br>`                      |
-| undefined | `<br>const type4 : undefined = undefined;<br>`               |
-| null      | `<br>const type5 : null = null;<br>`                         |
-| bigint    | `<br>const type6: bigint = 9007199254740991n;<br>// const type6: bigint = BigInt(9007199254740991);<br>` |
-| symbol    | `<br>const type7: symbol = Symbol('unique');<br>`            |
+| 类型        | 描述                             | 示例                                                    |
+| :---------- | :------------------------------- | :------------------------------------------------------ |
+| `string`    | 表示文本数据                     | `let name: string = "Alice";`                           |
+| `number`    | 表示数字，包括整数和浮点数       | `let age: number = 30;`                                 |
+| `boolean`   | 表示布尔值 `true` 或 `false`     | `let isDone: boolean = true;`                           |
+| `array`     | 表示相同类型的元素数组           | `let list: number[] = [1, 2, 3];`                       |
+| `tuple`     | 表示已知类型和长度的数组         | `let person: [string, number] = ["Alice", 30];`         |
+| `enum`      | 定义一组命名常量                 | `enum Color { Red, Green, Blue };`                      |
+| `any`       | 任意类型，不进行类型检查         | `let value: any = 42;`                                  |
+| `void`      | 无返回值（常用于函数）           | `function log(): void {}`                               |
+| `null`      | 表示空值                         | `let empty: null = null;`                               |
+| `undefined` | 表示未定义                       | `let undef: undefined = undefined;`                     |
+| `never`     | 表示不会有返回值                 | `function error(): never { throw new Error("error"); }` |
+| `object`    | 表示非原始类型                   | `let obj: object = { name: "Alice" };`                  |
+| `union`     | 联合类型，表示可以是多种类型之一 | `let id: string                                         |
+| `unknown`   | 不确定类型，需类型检查后再使用   | `let value: unknown = "Hello";`                         |
 
 **重点：为什么需要**`**any**`**和**`**unknow**`**类型**
 
@@ -71,7 +78,50 @@ const arr1: [string, number ] = ['xiaohe', 18];
 console.log(arr1[599]); //长度为“2”的元组类型“[string, string, string]”在索引“599“处没有元素
 ```
 
-##### 装箱类型
+**对象类型**：
+
+```typescript
+let person: { name: string; age: number } = { name: "Kimi", age: 30 };
+```
+
+**函数类型**：
+
+- 函数在TypeScript中也是引用类型，可以指定函数参数和返回值的类型。
+
+```typescript
+let myFunction: (a: number, b: number) => number = (a, b) => a + b;
+```
+
+**类和接口**：
+
+- 类和接口用于定义对象的形状，它们也是引用类型
+
+```typescript
+class Person {
+  name: string;
+  age: number;
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+
+interface PersonInterface {
+  name: string;
+  age: number;
+}
+```
+
+**枚举类型**：
+
+```typescript
+enum Color {Red, Green, Blue}
+let c: Color = Color.Green;
+```
+
+
+
+#### 装箱类型
 
 ##### 装箱
 
