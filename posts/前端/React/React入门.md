@@ -322,7 +322,19 @@ function Counter() {
 `useEffect` 钩子接受两个参数：
 
 1. **副作用函数（Effect Function）**： 这是第一个参数，一个执行副作用操作的函数。在这个函数内部，你可以执行诸如数据获取、订阅或手动更改React组件中的DOM等操作。这个函数的执行时机取决于你传递给 `useEffect` 的第二个参数，即依赖项数组。
-2. **依赖项数组（Dependencies Array）**（可选）： 这是第二个参数，一个数组，用于告诉React哪些值是副作用函数依赖的。这个数组中的值如果发生变化，React会重新执行副作用函数。如果不传递这个数组或者传递一个空数组，副作用函数只会在组件挂载和卸载时执行。
+   - 它应该返回一个 **清理函数**（cleanup），其 cleanup 代码 用来与该系统断开连接。
+
+1. **依赖项数组（Dependencies Array）**（可选）： 这是第二个参数，一个数组，用于告诉React哪些值是副作用函数依赖的。这个数组中的值如果发生变化，React会重新执行副作用函数。如果不传递这个数组或者传递一个空数组，副作用函数只会在组件挂载和卸载时执行。
+
+**React 在必要时会调用 setup 和 cleanup，这可能会发生多次**：
+
+1. 将组件挂载到页面时，将运行 `setup` 代码。
+2. 重新渲染依赖项变更的组件后：
+   - 首先，使用旧的 props 和 state 运行 `cleanup` 代码。
+   - 然后，使用新的 props 和 state 运行 `setup` 代码。
+3. 当组件从页面卸载后，`cleanup` 代码 将运行最后一次。
+
+**在开发环境下，React 在运行 setup 之前会额外运行一次setup 和 cleanup**。这是一个压力测试，用于验证 Effect 逻辑是否正确实现。
 
 ```jsx
 import { useState, useEffect } from 'react';
