@@ -1,21 +1,82 @@
 <template>
-  <div class="main">
-    <div v-for="yearList in data" class="yearItem">
-      <div class="year">
-        {{ yearList[0].frontMatter.date.split("-")[0] }}
-      </div>
-      <a
-        :href="withBase(article.regularPath)"
-        v-for="(article, index) in yearList"
-        :key="index"
-        class="article"
-      >
-        <div class="title">
-          <div class="title-o"></div>
-          {{ article.frontMatter.title }}
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+    <!-- 顶部统计信息 -->
+    <div class="mb-12 text-center">
+      <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-blue-500">
+        文章归档
+      </h1>
+      <p class="mt-4 text-gray-600 dark:text-gray-400">
+        共计 {{ totalPosts }} 篇文章，继续加油！
+      </p>
+    </div>
+
+    <!-- 时间线 -->
+    <div class="relative">
+      <!-- 垂直线 -->
+      <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-emerald-500/50 via-emerald-500/20 to-transparent"></div>
+
+      <!-- 年份分组 -->
+      <div v-for="yearGroup in groupedPosts" 
+           :key="yearGroup.year" 
+           class="relative mb-16 last:mb-0 pl-8">
+        <!-- 年份标记点 -->
+        <div class="absolute -left-[5px] top-0 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div>
+        
+        <!-- 年份标题 -->
+        <div class="flex items-center gap-4 mb-8">
+          <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">
+            {{ yearGroup.year }}
+          </h2>
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            {{ yearGroup.months.reduce((acc, month) => acc + month.posts.length, 0) }} 篇
+          </div>
         </div>
-        <div class="date">{{ article.frontMatter.date.slice(5) }}</div>
-      </a>
+
+        <!-- 月份分组 -->
+        <div class="space-y-8">
+          <div v-for="monthGroup in yearGroup.months" 
+               :key="`${yearGroup.year}-${monthGroup.month}`" 
+               class="relative">
+            <!-- 月份标题 -->
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-lg font-medium text-emerald-600 dark:text-emerald-400">
+                {{ monthGroup.month.toString().padStart(2, '0') }}月
+              </span>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {{ monthGroup.posts.length }} 篇
+              </span>
+            </div>
+
+            <!-- 文章列表 -->
+            <div class="space-y-3">
+              <a v-for="article in monthGroup.posts" 
+                 :key="article.regularPath"
+                 :href="withBase(article.regularPath)"
+                 class="group block">
+                <div class="p-4 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800/50 
+                           transition-all duration-300 
+                           hover:border-emerald-500/20 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                  <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <div class="w-1.5 h-1.5 rounded-full bg-emerald-500/50 
+                                transition-all duration-300 
+                                group-hover:scale-125 group-hover:bg-emerald-500"></div>
+                      <span class="text-gray-700 dark:text-gray-300 
+                                 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 
+                                 transition-colors duration-300 truncate">
+                        {{ article.frontMatter.title }}
+                      </span>
+                    </div>
+                    <time class="text-sm text-gray-500 dark:text-gray-400 font-mono whitespace-nowrap">
+                      {{ article.frontMatter.date.slice(8, 10) }}日
+                    </time>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -23,43 +84,62 @@
 <script lang="ts" setup>
 import { useData, withBase } from "vitepress";
 import { computed } from "vue";
-import { useYearSort } from "../utils";
 
 const { theme } = useData();
-const data = computed(() => useYearSort(theme.value.posts));
+
+// 计算文章总数
+const totalPosts = computed(() => theme.value.posts.length);
+
+// 按年月对文章进行分组
+const groupedPosts = computed(() => {
+  const posts = theme.value.posts;
+  const groups = {};
+
+  posts.forEach(post => {
+    const date = new Date(post.frontMatter.date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
+    if (!groups[year]) {
+      groups[year] = {
+        year,
+        months: {}
+      };
+    }
+
+    if (!groups[year].months[month]) {
+      groups[year].months[month] = {
+        month,
+        posts: []
+      };
+    }
+
+    groups[year].months[month].posts.push(post);
+  });
+
+  return Object.values(groups)
+    .sort((a, b) => b.year - a.year)
+    .map(yearGroup => ({
+      ...yearGroup,
+      months: Object.values(yearGroup.months)
+        .sort((a, b) => b.month - a.month)
+    }));
+});
 </script>
 
 <style scoped>
-.main {
-  margin: 0 auto;
-  padding: 0.5rem 1.5rem 4rem;
-  max-width: 48rem;
-}
-.yearItem {
-  border-bottom: 1px dashed #c7c7c7;
-}
-.yearItem:last-child {
-  border: none;
-}
-.year {
-  padding: 16px 0 8px 0;
-  font-size: 1.2rem;
-  font-weight: 600;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.article {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 10px 10px;
-  color: var(--vp-c-text-2);
-  transition: border 0.3s ease, color 0.3s ease;
-}
-.article:hover {
-  text-decoration: none;
-  color: var(--vp-c-brand);
-}
-.date {
-  font-family: Georgia, sans-serif;
+.yearItem {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 </style>

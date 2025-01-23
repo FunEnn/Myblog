@@ -11,6 +11,8 @@ tags:
 ## 1、通过create-vue搭建vue3 项目
 
 > **npm init vue@latest**
+>
+> **pnpm create vite my-app --template**
 
 依次输入问题的答案，帮助创建项目：
 

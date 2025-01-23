@@ -1,9 +1,9 @@
 ---
 title: nginx 80端口被占用解决方案
-date: 2024-06-30 16:34:43
-tags: nginx
-categories:	前端
-copyright_url: https://funenn.github.io/2024/06/30/nginx%2080%E7%AB%AF%E5%8F%A3%E8%A2%AB%E5%8D%A0%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/
+date: 2024-10-20 20:58:53
+description: 笔记
+tags:
+ - nginx
 ---
 
 #### 进入 nginx-1.12.1\logs 路径下，打开error.log文件，发现有以下错误日志：

@@ -12,6 +12,7 @@ tags:
 
 ```
 npx create-react-app my-app
+pnpm create vite my-app --template
 ```
 
 **启动项目**

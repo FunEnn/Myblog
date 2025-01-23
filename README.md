@@ -1,39 +1,48 @@
-## Detail
+# FunEnn's Blog
 
-This is a blog theme used vitepress to build. You could [click here](https://visionary-sunflower-dc7ae3.netlify.app/) to see what it looks like.
+这是一个基于 VitePress 构建的个人博客主题。你可以[点击这里](https://funenn.github.io/Myblog/)查看在线演示。
 
-## Highlights
+## ✨ 特性
 
-- [x] pagination
-- [x] dark mode
-- [x] archives
-- [x] tags
-- [x] content level
-- [x] comments
-- [x] lastUpdated
-- [x] github actions
-- [x] mobile + desktop
-- [x] RSS
-- [x] Local Search
-- [x] Math Equation(markdown-it-mathjax3)
-- [x] type information with jsdoc on code snippets (by https://shikiji.netlify.app/packages/markdown-it )
+- 🎨 响应式设计，完美支持移动端和桌面端
+- 🌙 深色模式支持
+- 📱 移动端适配优化
+- 🔍 本地搜索功能
+- 📖 文章归档功能
+- 🏷️ 标签分类系统
+- 💬 评论系统集成
+- 📅 文章更新时间显示
+- 🤖 GitHub Actions 自动部署
+## 🚀 快速开始
 
-## Start
+```bash
+# 克隆项目
+npx degit FunEnn/Myblog my-blog
 
-```shell
-npx degit clark-cui/vitepress-blog-zaun my-vitepress-blog
-cd my-vitepress-blog
-pnpm i # If you didn't install pnpm,you can run: npm install -g pnpm
-pnpm dev
+# 进入项目目录
+cd my-blog
+
+# 安装依赖
+pnpm install  # 如果没有安装 pnpm，可以运行：npm install -g pnpm
+
+# 启动开发服务器
+pnpm run docs:dev
 ```
 
-If you want to view rss result or use local search in development mode, you should run
+## 📝 项目结构
 
-```shell
-pnpm run build
-pnpm run serve
 ```
-## Announcement
-Due to my busy work, I don't have a lot of time to maintain this theme, and currently it's just an usual dependency upgrade.
-This theme is more suitable for developers with experience, you can fork my repository, custom modification.
-For users who don't know how to code, you may encounter problems and feel uncomfortable, I'm happy to help, but if I reply to the delay please forgive me.
+.
+├── .vitepress/          # VitePress 配置目录
+│   ├── config.ts        # 主配置文件
+│   └── theme/           # 主题相关文件
+├── posts/              # 博客文章目录
+├── public/             # 静态资源目录
+└── components/         # Vue 组件目录
+```
+
+## 🔧 自定义配置
+
+1. 修改 `.vitepress/config.ts` 中的配置项
+2. 在 `posts/` 目录下添加你的文章
+3. 自定义主题样式：修改 `.vitepress/theme/` 下的文件

@@ -39,6 +39,7 @@ React用于构建用户界面的JS库。是一个将数据渲染为HTML视图的
 
 > ```
 > npx create-react-app my-app
+> pnpm create vite my-app --template
 > ```
 
 **项目的目录结构如下：**

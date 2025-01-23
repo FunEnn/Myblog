@@ -11,8 +11,12 @@
       <!-- <Comments /> -->
     </template>
     <!-- Home slot-->
-    <template #home-hero-before><HomeHero /> </template>
-    <template #home-features-after> <Page /></template>
+    <template #home-hero-before>
+      <HomeHero />
+    </template>
+    <template #home-features-after>
+      <Page />
+    </template>
   </Layout>
   <!-- copywright -->
   <CopyWright />
@@ -52,6 +56,7 @@ button::after {
   transform-origin: bottom right;
   transition: transform 0.25s ease-out;
 }
+
 button:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
