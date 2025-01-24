@@ -1,44 +1,123 @@
 <template>
-  <FireWorksAnimation />
-  <ShareCard />
-  <h1 class="blog-title">Blogs</h1>
-  <div class="blogList">
-    <a class="blog" v-for="item in posts" :href="withBase(item.regularPath)">
-      <div class="title">{{ item.frontMatter.title }}</div>
-      <div class="date">{{ transDate(item.frontMatter.date) }}</div>
-    </a>
-  </div>
-  <div class="pagination">
-    <button class="left" v-if="pageCurrent > 1" @click="go(pageCurrent - 1)">
-      Previous page
-    </button>
-    <div v-if="pagesNum > 1">{{ `${pageCurrent}/${pagesNum}` }}</div>
-    <button
-      class="right"
-      v-if="pageCurrent < pagesNum"
-      @click="go(pageCurrent + 1)"
-    >
-      Next page
-    </button>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- 左侧文章列表 -->
+      <div class="lg:col-span-8">
+        <!-- 文章统计 -->
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-blue-500">
+            Latest Posts
+          </h1>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            共 {{ postLength }} 篇文章
+          </span>
+        </div>
+
+        <!-- 文章列表 -->
+        <div class="space-y-6">
+          <a v-for="item in posts" 
+             :key="item.regularPath" 
+             :href="withBase(item.regularPath)"
+             class="group block p-6 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800/50 
+                    transition-all duration-300 hover:-translate-y-1
+                    hover:border-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+            <!-- 文章标题 -->
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              {{ item.frontMatter.title }}
+            </h2>
+            
+            <!-- 文章元信息 -->
+            <div class="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <time class="flex items-center gap-1">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ transDate(item.frontMatter.date) }}
+              </time>
+              
+              <!-- 标签 -->
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.995 1.995 0 013 12V7a4 4 0 014-4z" 
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span v-if="item.frontMatter.tags" 
+                      v-for="tag in item.frontMatter.tags" 
+                      :key="tag"
+                      class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-400">
+                  {{ tag }}
+                </span>
+              </div>
+            </div>
+
+            <!-- 文章摘要 -->
+            <p v-if="item.frontMatter.description" 
+               class="mt-3 text-gray-600 dark:text-gray-400 line-clamp-2">
+              {{ item.frontMatter.description }}
+            </p>
+          </a>
+        </div>
+        
+        <!-- 分页 -->
+        <div class="flex items-center justify-center gap-4 mt-8">
+          <button v-if="pageCurrent > 1" 
+                  @click="go(pageCurrent - 1)"
+                  class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 
+                         hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors">
+            ← Previous
+          </button>
+          <span v-if="pagesNum > 1" class="text-sm text-gray-500">
+            {{ pageCurrent }}/{{ pagesNum }}
+          </span>
+          <button v-if="pageCurrent < pagesNum" 
+                  @click="go(pageCurrent + 1)"
+                  class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 
+                         hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors">
+            Next →
+          </button>
+        </div>
+      </div>
+
+      <!-- 右侧边栏 -->
+      <div class="lg:col-span-4 space-y-6">
+        <ShareCard />
+        <Projects />
+      </div>
+    </div>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { ref } from "vue";
 import ShareCard from "./ShareCard.vue";
-import FireWorksAnimation from "./FireWorksAnimation.vue";
+import Projects from "./Projects.vue";
 import { useData, withBase } from "vitepress";
-interface post {
-  regularPath: string;
-  frontMatter: object;
+
+interface Theme {
+  posts: Post[]
+  postLength: number
+  pageSize: number
 }
+
+interface Post {
+  regularPath: string;
+  frontMatter: {
+    title: string;
+    date: string;
+    tags?: string[];
+    description?: string;
+  };
+}
+
 const { theme } = useData();
 
 // get posts
-let postsAll = theme.value.posts || [];
+let postsAll = (theme.value as Theme).posts || [];
 // get postLength
-let postLength = theme.value.postLength;
+let postLength = (theme.value as Theme).postLength;
 // get pageSize
-let pageSize = theme.value.pageSize;
+let pageSize = (theme.value as Theme).pageSize;
 
 //  pagesNum
 let pagesNum =
@@ -49,7 +128,7 @@ pagesNum = parseInt(pagesNum.toString());
 //pageCurrent
 let pageCurrent = ref(1);
 // filter index post
-postsAll = postsAll.filter((item: post) => {
+postsAll = postsAll.filter((item: Post) => {
   return item.regularPath.indexOf("index") < 0;
 });
 // pagination
@@ -65,7 +144,7 @@ for (let i = 0; i < postsAll.length; i++) {
   allMap[index].push(postsAll[i]);
 }
 // set posts
-let posts = ref([]);
+let posts = ref<Post[]>([]);
 posts.value = allMap[pageCurrent.value - 1];
 
 // click pagination
@@ -76,59 +155,12 @@ const go = (i) => {
 // timestamp transform
 const transDate = (date: string) => {
   const dateArray = date.split("-");
-  let year = dateArray[0],
-    month = ``,
-    day = dateArray[2];
-  switch (dateArray[1]) {
-    case "1":
-    case "01":
-      month = `Jan`;
-      break;
-    case "2":
-    case "02":
-      month = `Feb`;
-      break;
-    case "3":
-    case "03":
-      month = `Mar`;
-      break;
-    case "4":
-    case "04":
-      month = `Apr`;
-      break;
-    case "5":
-    case "05":
-      month = `May`;
-      break;
-    case "6":
-    case "06":
-      month = `Jun`;
-      break;
-    case "7":
-    case "07":
-      month = `Jul`;
-      break;
-    case "8":
-    case "08":
-      month = `Aug`;
-      break;
-    case "9":
-    case "09":
-      month = `Sep`;
-      break;
-    case "10":
-      month = `Oct`;
-      break;
-    case "11":
-      month = `Nov`;
-      break;
-    case "12":
-      month = `Dec`;
-      break;
-    default:
-      month = `Month`;
-  }
-  return `${month} ${day}, ${year}`;
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  const month = months[parseInt(dateArray[1]) - 1];
+  return `${month} ${dateArray[2]}, ${dateArray[0]}`;
 };
 </script>
 

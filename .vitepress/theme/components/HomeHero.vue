@@ -1,87 +1,120 @@
 <template>
-  <div class="content">
-    <div class="flex justify-center items-center flex-auto">
-      <div
-        class="w-36 h-36 mx-auto rounded-full shadow-[0px_0px_3px#147eae] dark:shadow-[0px_0px_3px#9ba0a9] top-1/2 avatar-ping left-1/2">
+  <div class="relative py-16 sm:py-24 overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/30 dark:to-indigo-950/30 opacity-60"></div>
+      <div class="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-violet-500/10 to-transparent"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <!-- 主标题 -->
+        <div class="relative inline-block">
+          <h1 class="text-4xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 pb-2">
+            Welcome to My Blog
+          </h1>
+          <div class="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-violet-500/0 via-violet-500/70 to-violet-500/0"></div>
+        </div>
+
+        <!-- 副标题 -->
+        <p class="mt-6 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          探索技术的边界，分享创造的乐趣
+        </p>
+        
+        <!-- 动态标签云 -->
+        <div class="mt-12 flex flex-wrap justify-center gap-4">
+          <div v-for="(tag, index) in tags" 
+               :key="index"
+               :class="[
+                 'tag-bounce px-4 py-2 rounded-full transition-all duration-300',
+                 `bg-${tag.color}-100 dark:bg-${tag.color}-900/50`,
+                 `text-${tag.color}-800 dark:text-${tag.color}-400`,
+                 `hover:bg-${tag.color}-200 dark:hover:bg-${tag.color}-800/50`,
+                 'cursor-pointer hover:scale-110',
+                 `animate-bounce-delay-${index}`
+               ]">
+            {{ tag.icon }} {{ tag.text }}
+          </div>
+        </div>
+
+        <!-- 快速导航 -->
+        <div class="mt-12 flex flex-wrap justify-center gap-6">
+          <a v-for="(link, index) in quickLinks"
+             :key="index"
+             :href="link.url"
+             class="group relative px-6 py-3 text-sm font-medium rounded-full 
+                    bg-white dark:bg-gray-800 shadow-md hover:shadow-lg
+                    transition-all duration-300 hover:-translate-y-1">
+            <span class="relative z-10 text-gray-700 dark:text-gray-300 group-hover:text-white transition-colors duration-300">
+              {{ link.icon }} {{ link.text }}
+            </span>
+            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-0"></div>
+          </a>
+        </div>
+
+        <!-- 滚动提示 -->
+        <div class="mt-16 animate-bounce">
+          <svg class="w-6 h-6 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+          </svg>
+        </div>
       </div>
-      <div class="absolute">
-        <img :src="theme.avator" width="150" height="150" class="avator" />
-      </div>
-      <p
-        class="tag-bounce block absolute left-[70%] sm:left-[69%] md:left-[66%] lg:left-[63%] xl:left-[55%] xl:top-[12%] top-[10%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
-        🌟 前端开发
-      </p>
-      <p
-        class="tag-bounce block absolute left-[0%] sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[37%] xl:top-[12%] top-[10%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
-        🌙 后端开发
-      </p>
-      <p
-        class="tag-bounce block absolute left-[0%] sm:left-[8%] md:left-[13%] lg:left-[21%] xl:left-[37%] xl:top-[16%] top-[14%] px-3 py-0.5 text-sm font-bold rounded-full shadow-[0px_0px_1px_1px#eee]">
-        ✨ 热爱生活
-      </p>
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import { useData } from "vitepress";
-const { theme } = useData();
+
+<script setup lang="ts">
+import { withBase } from 'vitepress'
+
+const tags = [
+  { text: '前端开发', icon: '🌟', color: 'sky' },
+  { text: '后端开发', icon: '🌙', color: 'purple' },
+  { text: '热爱生活', icon: '✨', color: 'cyan' },
+  { text: '开源精神', icon: '🎯', color: 'yellow' },
+  { text: '技术分享', icon: '📚', color: 'blue' },
+  { text: '学习成长', icon: '🌱', color: 'emerald' }
+]
+
+const quickLinks = [
+  { text: '最新文章', icon: '📝', url: withBase('/articles') },
+  { text: '实用工具', icon: '🛠️', url: withBase('/tools') },
+  { text: '关于我', icon: '👨‍💻', url: withBase('/about') },
+  { text: '友情链接', icon: '🔗', url: withBase('/friends') }
+]
 </script>
+
 <style scoped>
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 300px;
-}
-
-.avator {
-  border-radius: 50%;
-  border: 5px solid var(--vp-avator-border);
-}
-
-@keyframes avator-transform {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.avator:hover {
-  animation: 5s linear 0s infinite avator-transform;
-}
-
-.avatar-ping {
-  animation: avatarPing 2s ease-in infinite;
-}
-
-@keyframes avatarPing {
-
-  0%,
-  100% {
-    transform: translateX(-0%) translateY(-0%) scale(1.05);
-  }
-
-  50% {
-    transform: translateX(-0%) translateY(-0%) scale(1.1);
-  }
-}
-
 .tag-bounce {
-  animation: tagBounce 1.5s ease-in infinite;
+  animation: bounce 3s infinite;
 }
 
-@keyframes tagBounce {
-
-  0%,
-  100% {
+@keyframes bounce {
+  0%, 100% {
     transform: translateY(0);
   }
-
   50% {
-    transform: translateY(-10%);
+    transform: translateY(-10px);
+  }
+}
+
+/* 为每个标签添加不同的动画延迟 */
+.animate-bounce-delay-0 { animation-delay: 0s; }
+.animate-bounce-delay-1 { animation-delay: 0.2s; }
+.animate-bounce-delay-2 { animation-delay: 0.4s; }
+.animate-bounce-delay-3 { animation-delay: 0.6s; }
+.animate-bounce-delay-4 { animation-delay: 0.8s; }
+.animate-bounce-delay-5 { animation-delay: 1s; }
+
+/* 优化动画性能 */
+.tag-bounce {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* 响应式调整 */
+@media (max-width: 640px) {
+  .tag-bounce {
+    animation: none;
   }
 }
 </style>
