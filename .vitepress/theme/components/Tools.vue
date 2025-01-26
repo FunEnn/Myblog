@@ -48,6 +48,16 @@ onUnmounted(() => {
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const handleClick = (event: MouseEvent, tool: any) => {
+  if (tool.isDownload) {
+    event.preventDefault()
+    const link = document.createElement('a')
+    link.href = tool.url
+    link.download = tool.url.split('/').pop() || ''
+    link.click()
+  }
+}
 </script>
 
 <template>
@@ -146,8 +156,10 @@ const scrollToTop = () => {
                 <a v-for="tool in category.tools" 
                    :key="tool.name"
                    :href="tool.url.startsWith('http') ? tool.url : withBase(tool.url)"
+                   :download="tool.isDownload"
                    target="_blank" 
                    rel="noopener noreferrer"
+                   @click="handleClick($event, tool)"
                    class="group">
                   <div class="h-full p-4 rounded-lg 
                               bg-white dark:bg-gray-800

@@ -2,6 +2,7 @@ interface Tool {
   name: string;
   description: string;
   url: string;
+  isDownload?: boolean;
 }
 
 interface ToolCategory {
@@ -129,12 +130,16 @@ export const toolCategories: ToolCategory[] = [
       {
         name: "哔咔漫画",
         description: "免费漫画阅读器，资源丰富，需要科学上网",
-        url: "https://picacomic.com/",
+        url: "/apps/picacomic-v2.2.1.3.3.4.apk",
+        isDownload: true,
       },
       {
         name: "禁漫天堂",
         description: "在线漫画网站，内容丰富，需要科学上网",
-        url: "https://18comic.vip/",
+        url: /Android|iPhone|iPad/i.test(navigator?.userAgent || "")
+          ? "/apps/18comic.apk" // 移动端显示客户端下载
+          : "https://18comic.vip/", // PC端显示网页版
+        isDownload: /Android|iPhone|iPad/i.test(navigator?.userAgent || ""), // 移动端设置为下载模式
       },
       {
         name: "Hitomi",
@@ -205,7 +210,8 @@ export const toolCategories: ToolCategory[] = [
       },
       {
         name: "明日方舟 Wiki",
-        description: "明日方舟中文攻略站，干员图鉴、基建配置、剿灭作战等资料详实",
+        description:
+          "明日方舟中文攻略站，干员图鉴、基建配置、剿灭作战等资料详实",
         url: "https://prts.wiki/",
       },
       {
@@ -215,7 +221,8 @@ export const toolCategories: ToolCategory[] = [
       },
       {
         name: "学园偶像大师 Wiki",
-        description: "学马仕中文攻略站，包含角色培养、剧情翻译、竞技场配队等资料",
+        description:
+          "学马仕中文攻略站，包含角色培养、剧情翻译、竞技场配队等资料",
         url: "https://www.gamekee.com/gakumas/",
       },
       {
@@ -243,6 +250,7 @@ export const toolCategories: ToolCategory[] = [
         name: "Kirikiroid2",
         description: "安卓平台的吉里吉里2引擎模拟器，支持大部分日本 Galgame",
         url: "https://github.com/zeas2/Kirikiroid2/releases/download/1.3.9/Kirikiroid2_1.3.9.apk",
+        isDownload: true,
       },
       {
         name: "MisakaTranslator",
