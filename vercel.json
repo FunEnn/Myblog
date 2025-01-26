@@ -3,6 +3,9 @@
   "outputDirectory": ".vitepress/dist",
   "framework": "vitepress",
   "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
