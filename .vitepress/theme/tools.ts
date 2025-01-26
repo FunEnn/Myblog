@@ -130,16 +130,16 @@ export const toolCategories: ToolCategory[] = [
       {
         name: "哔咔漫画",
         description: "免费漫画阅读器，资源丰富，需要科学上网",
-        url: "/apps/picacomic-v2.2.1.3.3.4.apk",
+        url: "https://www.picacomic.com/apps/picacomic-v2.2.1.3.3.4.apk",
         isDownload: true,
       },
       {
         name: "禁漫天堂",
         description: "在线漫画网站，内容丰富，需要科学上网",
-        url: /Android|iPhone|iPad/i.test(navigator?.userAgent || "")
-          ? "/apps/18comic.apk" // 移动端显示客户端下载
-          : "https://18comic.vip/", // PC端显示网页版
-        isDownload: /Android|iPhone|iPad/i.test(navigator?.userAgent || ""), // 移动端设置为下载模式
+        url: typeof window !== 'undefined' && /Android|iPhone|iPad/i.test(window.navigator?.userAgent || '') 
+          ? "https://www.18comic.vip/apps/18comic.apk"
+          : "https://18comic.vip/",
+        isDownload: typeof window !== 'undefined' && /Android|iPhone|iPad/i.test(window.navigator?.userAgent || '')
       },
       {
         name: "Hitomi",
