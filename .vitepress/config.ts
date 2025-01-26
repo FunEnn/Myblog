@@ -89,10 +89,6 @@ async function config() {
         md.use(mathjax3);
       },
     },
-    rewrites: {
-      'index.md': 'index.html',
-      ':path/index.md': ':path/index.html',
-    },
     vite: {
       css: {
         postcss: {
