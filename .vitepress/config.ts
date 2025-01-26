@@ -11,7 +11,8 @@ async function config() {
     lang: "en-US",
     title: "FunEnn",
     description: "Home of FunEnn",
-    base: "/Myblog/",
+    base: "/",
+    outDir: ".vitepress/dist",
     ignoreDeadLinks: true, // 或 'localhostLinks'
     head: [
       [
@@ -87,6 +88,10 @@ async function config() {
       config: (md) => {
         md.use(mathjax3);
       },
+    },
+    rewrites: {
+      'index.md': 'index.html',
+      ':path/index.md': ':path/index.html',
     },
     vite: {
       css: {
