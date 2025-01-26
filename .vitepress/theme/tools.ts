@@ -130,13 +130,13 @@ export const toolCategories: ToolCategory[] = [
       {
         name: "哔咔漫画",
         description: "免费漫画阅读器，资源丰富，需要科学上网",
-        url: "https://github.com/shizq123/BIKA/releases/shizq123/BIKA/releases/download/v1.0.7/BIKA_v1.0.7.apk",
+        url: "https://github.com/shizq123/BIKA/releases/download/v1.0.7/BIKA_v1.0.7.apk",
         isDownload: true,
       },
       {
         name: "禁漫天堂",
         description: "在线漫画网站，内容丰富，需要科学上网",
-        url: "https://18comic.vip/static/apk/1.7.6.apk",
+        url: "https://github.com/hect0x7/JMComic-APK/releases/download/1.7.6/1.7.6.apk",
         isDownload: true,
       },
       {
