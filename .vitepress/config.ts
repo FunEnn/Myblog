@@ -2,6 +2,7 @@ import { getPosts, getPostLength } from "./theme/serverUtils";
 import { buildBlogRSS } from "./theme/rss";
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
 import mathjax3 from "markdown-it-mathjax3";
+import { defineConfig } from 'vitepress'
 
 async function config() {
   return {
@@ -85,11 +86,24 @@ async function config() {
         md.use(mathjax3);
       },
     },
-    // vite: {
-    //   ssr: {
-    //     noExternal: ["vitepress-plugin-twoslash"],
-    //   },
-    // },
+    vite: {
+      css: {
+        postcss: {
+          plugins: [
+            require('tailwindcss'),
+            require('autoprefixer'),
+          ],
+        },
+      },
+      build: {
+        cssMinify: true,
+        rollupOptions: {
+          output: {
+            manualChunks: undefined
+          }
+        }
+      }
+    },
   };
 }
 export default config();
