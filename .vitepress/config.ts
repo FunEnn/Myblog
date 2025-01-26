@@ -3,6 +3,8 @@ import { buildBlogRSS } from "./theme/rss";
 import { transformerTwoslash } from "@shikijs/vitepress-twoslash";
 import mathjax3 from "markdown-it-mathjax3";
 import { defineConfig } from 'vitepress'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 async function config() {
   return {
@@ -90,8 +92,8 @@ async function config() {
       css: {
         postcss: {
           plugins: [
-            require('tailwindcss'),
-            require('autoprefixer'),
+            tailwindcss(),
+            autoprefixer(),
           ],
         },
       },
