@@ -11,7 +11,7 @@ async function config() {
     lang: "en-US",
     title: "FunEnn",
     description: "Home of FunEnn",
-    base: "/",
+    base: "/Myblog",
     outDir: ".vitepress/dist",
     ignoreDeadLinks: true, // 或 'localhostLinks'
     head: [
