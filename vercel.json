@@ -1,8 +1,11 @@
 {
-  "buildCommand": "pnpm run docs:build",
+  "buildCommand": "npm run docs:build",
   "outputDirectory": ".vitepress/dist",
   "framework": "vitepress",
-  "installCommand": "pnpm install",
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
