@@ -105,8 +105,15 @@ async function config() {
             manualChunks: undefined
           }
         }
+      },
+      ssr: {
+        noExternal: ['vitepress']
       }
     },
+    cleanUrls: true,
+    rewrites: {
+      ':page': ':page.html'
+    }
   };
 }
 export default config();
