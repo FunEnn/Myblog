@@ -45,7 +45,7 @@ async function config() {
         },
       ],
     ],
-    // cleanUrls: "with-subfolders",
+    cleanUrls: true,
     lastUpdated: false,
     themeConfig: {
       // repo: "clark-cui/homeSite",
@@ -105,6 +105,9 @@ async function config() {
             manualChunks: undefined
           }
         }
+      },
+      ssr: {
+        noExternal: ['vitepress']
       }
     },
   };
