@@ -98,29 +98,15 @@ async function config() {
           ],
         },
       },
-      optimizeDeps: {
-        include: ['vue', 'vitepress']
-      },
       build: {
         cssMinify: true,
         rollupOptions: {
           output: {
             manualChunks: undefined
-          },
-          external: [
-            'vue',
-            'vitepress'
-          ]
+          }
         }
-      },
-      ssr: {
-        noExternal: ['vitepress']
       }
     },
-    cleanUrls: true,
-    rewrites: {
-      ':page': ':page.html'
-    }
   };
 }
 export default config();
