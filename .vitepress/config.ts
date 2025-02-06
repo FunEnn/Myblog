@@ -98,6 +98,9 @@ async function config() {
           ],
         },
       },
+      optimizeDeps: {
+        include: ['vue', 'vitepress']
+      },
       build: {
         cssMinify: true,
         rollupOptions: {
@@ -108,11 +111,6 @@ async function config() {
             'vue',
             'vitepress'
           ]
-        },
-        resolve: {
-          alias: {
-            '@': '/docs'
-          }
         }
       },
       ssr: {
@@ -122,8 +120,7 @@ async function config() {
     cleanUrls: true,
     rewrites: {
       ':page': ':page.html'
-    },
-    srcDir: './docs'
+    }
   };
 }
 export default config();
