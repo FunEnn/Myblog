@@ -103,6 +103,15 @@ async function config() {
         rollupOptions: {
           output: {
             manualChunks: undefined
+          },
+          external: [
+            'vue',
+            'vitepress'
+          ]
+        },
+        resolve: {
+          alias: {
+            '@': '/docs'
           }
         }
       },
@@ -113,7 +122,8 @@ async function config() {
     cleanUrls: true,
     rewrites: {
       ':page': ':page.html'
-    }
+    },
+    srcDir: './docs'
   };
 }
 export default config();
