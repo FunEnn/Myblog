@@ -10,9 +10,11 @@ tags:
 
 在获取图片时发生以下报错
 
-![image-20250209234132400](C:\Users\30958\AppData\Roaming\Typora\typora-user-images\image-20250209234132400.png)
+![image-20250209234132400](https://img.picui.cn/free/2025/02/13/67ad892943b8d.png)
 
-![image-20250209234310637](C:\Users\30958\AppData\Roaming\Typora\typora-user-images\image-20250209234310637.png)Next.js 图片组件扩展了 HTML `<img>` 元素，具有自动图片优化功能：
+![image-20250209234310637](https://img.picui.cn/free/2025/02/13/67ad8929567d6.png)
+
+Next.js 图片组件扩展了 HTML `<img>` 元素，具有自动图片优化功能：
 
 - 尺寸优化：使用 WebP 和 AVIF 等现代图片格式自动为每个设备提供正确尺寸的图片。
 - 视觉稳定性：加载图片时自动阻止 布局转变。
