@@ -35,8 +35,20 @@ const markdown = MarkdownIt({
 });
 
 export async function buildBlogRSS() {
-  const posts = await generateRSS();
-  writeFeed("feed", posts);
+  try {
+    const posts = await generateRSS();
+    // 确保所有文章内容都有值
+    const validPosts = posts.map(post => ({
+      ...post,
+      content: post.content || '',  // 提供默认值
+      description: post.description || '',
+      title: post.title || 'Untitled'
+    }));
+    writeFeed("feed", validPosts);
+  } catch (error) {
+    console.warn('RSS generation failed:', error);
+    // 继续构建过程
+  }
 }
 
 async function generateRSS() {
