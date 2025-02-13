@@ -78,13 +78,7 @@ async function config() {
       aside: false,
       // blogs page show firewokrs animation
     },
-    buildEnd: async () => {
-      try {
-        await buildBlogRSS();
-      } catch (error) {
-        console.warn('RSS generation failed:', error);
-      }
-    },
+    buildEnd: buildBlogRSS,
     markdown: {
       theme: {
         light: "vitesse-light",
