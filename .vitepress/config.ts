@@ -106,9 +106,6 @@ async function config() {
           }
         }
       },
-      ssr: {
-        noExternal: ['vitepress']
-      }
     },
   };
 }
