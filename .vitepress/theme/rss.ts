@@ -61,14 +61,20 @@ async function generateRSS() {
         .map(async (i) => {
           const raw = await fs.readFile(i, "utf-8");
           const { data, content } = matter(raw);
+          
+          // 确保内容不为空并进行安全处理
+          const safeContent = content || '';
           const html = markdown
-            .render(content)
-            .replace('src="/', `src="${DOMAIN}/`);
+            .render(safeContent)
+            .replace('src="/', `src="${DOMAIN}/`)
+            .replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/g, ''); // 移除非法字符
 
           return {
             ...data,
             date: new Date(data.date),
-            content: html,
+            content: html || '',  // 确保内容不为 undefined
+            description: data.description || '',
+            title: data.title || 'Untitled',
             author: [AUTHOR],
             link: `${DOMAIN}/${i.replace(".md", ".html")}`,
           };
