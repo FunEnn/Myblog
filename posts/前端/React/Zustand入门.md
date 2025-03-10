@@ -291,7 +291,7 @@ const useStore = create((set) => ({
 
 **Redux示例**
 
-```react
+```ts
 import { createStore } from 'redux'
 import { useSelector, useDispatch } from 'react-redux'
 
