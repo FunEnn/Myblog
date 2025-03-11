@@ -1,6 +1,6 @@
 # FunEnn's Blog
 
-这是一个基于 VitePress 构建的个人博客主题。你可以[点击这里](https://funenn.github.io/Myblog/)查看在线演示。
+这是一个基于 VitePress 构建的个人博客主题。你可以[点击这里](https://www.funenn.xyz/)查看在线演示。
 
 ## ✨ 特性
 
@@ -10,18 +10,11 @@
 - 🔍 本地搜索功能
 - 📖 文章归档功能
 - 🏷️ 标签分类系统
-- 💬 评论系统集成
 - 📅 文章更新时间显示
 - 🤖 GitHub Actions 自动部署
 ## 🚀 快速开始
 
 ```bash
-# 克隆项目
-npx degit FunEnn/Myblog my-blog
-
-# 进入项目目录
-cd my-blog
-
 # 安装依赖
 pnpm install  # 如果没有安装 pnpm，可以运行：npm install -g pnpm
 

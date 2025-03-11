@@ -12,8 +12,9 @@
       </div>
       
       <h2 class="mt-4 text-xl font-bold text-gray-900 dark:text-gray-100">FunEnn</h2>
-      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center">
-        Passionate about coding & open source
+      <!-- 随机名言 -->
+      <p class="mt-3 text-sm italic text-indigo-600 dark:text-indigo-400 text-center px-4">
+        "{{ displayedText }}"
       </p>
       <!-- 技术栈标签 -->
       <div class="mt-6 flex flex-wrap gap-2 justify-center">
@@ -67,7 +68,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useData } from 'vitepress'
 
 const { theme } = useData()
@@ -78,23 +79,9 @@ const techStack = [
   { name: 'React', color: 'blue' },
   { name: 'TypeScript', color: 'purple' },
   { name: 'Node.js', color: 'green' },
-  { name: 'C++', color: 'blue' },
+  { name: 'Next.js', color: 'blue' },
   { name: 'MongoDB', color: 'green' },
-  { name: 'Git', color: 'yellow' },
-]
-
-// 社交链接数据
-const socialLinks = [
-  {
-    name: 'GitHub',
-    link: 'https://github.com/FunEnn',
-    icon: 'i-carbon-logo-github'
-  },
-  {
-    name: 'Email',
-    link: '3095852337@qq.com',
-    icon: 'i-carbon-email'
-  }
+  { name: 'Git', color: 'purple' },
 ]
 
 // 随机名言
@@ -107,6 +94,31 @@ const quotes = [
 
 const randomQuote = computed(() => {
   return quotes[Math.floor(Math.random() * quotes.length)]
+})
+
+// 打字效果相关
+const displayedText = ref('')
+const currentQuote = ref('')
+const typingSpeed = 100 // 打字速度（毫秒）
+
+const typeText = async () => {
+  displayedText.value = ''
+  currentQuote.value = randomQuote.value
+  
+  for (let i = 0; i < currentQuote.value.length; i++) {
+    displayedText.value += currentQuote.value[i]
+    await new Promise(resolve => setTimeout(resolve, typingSpeed))
+  }
+}
+
+// 监听随机名言变化
+watch(randomQuote, () => {
+  typeText()
+})
+
+// 组件挂载时开始打字效果
+onMounted(() => {
+  typeText()
 })
 </script>
 

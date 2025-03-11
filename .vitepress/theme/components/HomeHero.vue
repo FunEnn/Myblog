@@ -2,22 +2,22 @@
   <div class="relative py-16 sm:py-24 overflow-hidden">
     <!-- 背景装饰 -->
     <div class="absolute inset-0 -z-10">
-      <div class="absolute inset-0 bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/30 dark:to-indigo-950/30 opacity-60"></div>
-      <div class="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-violet-500/10 to-transparent"></div>
+      <div class="absolute inset-0 bg-[url('./hero-bg.png')] bg-cover bg-center bg-fixed bg-no-repeat transition-opacity duration-500 ease-in-out"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-violet-50/60 to-indigo-50/80  dark:to-indigo-950/90 backdrop-blur-[2px] transition-all duration-300"></div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <!-- 主标题 -->
         <div class="relative inline-block">
-          <h1 class="text-4xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 pb-2">
+          <h1 class="text-4xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-indigo-500 dark:from-violet-400 dark:to-indigo-300 pb-2">
             Welcome to My Blog
           </h1>
-          <div class="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-violet-500/0 via-violet-500/70 to-violet-500/0"></div>
+          <div class="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-violet-500/0 via-violet-500/70 to-violet-500/0 dark:from-violet-400/0 dark:via-violet-400/70 dark:to-violet-400/0"></div>
         </div>
 
         <!-- 副标题 -->
-        <p class="mt-6 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+        <p class="mt-6 text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
           Code · Create · Share
         </p>
         
@@ -70,7 +70,7 @@ const tags = [
   { text: '前端开发', icon: '🌟', color: 'sky' },
   { text: '后端开发', icon: '🌙', color: 'purple' },
   { text: '热爱生活', icon: '✨', color: 'cyan' },
-  { text: '开源精神', icon: '🎯', color: 'yellow' },
+  { text: '开源精神', icon: '🎯', color: 'green' },
   { text: '技术分享', icon: '📚', color: 'blue' },
   { text: '学习成长', icon: '🌱', color: 'emerald' }
 ]
@@ -115,6 +115,35 @@ const quickLinks = [
 @media (max-width: 640px) {
   .tag-bounce {
     animation: none;
+  }
+}
+
+/* 背景图片响应式适配 */
+@media (max-width: 640px) {
+  [class*="bg-[url('./hero-bg.png')]"] {
+    background-attachment: scroll;
+    background-position: center 30%;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  [class*="bg-[url('./hero-bg.png')]"] {
+    background-position: center;
+    background-attachment: fixed;
+  }
+}
+
+/* 优化背景图片加载 */
+@media (prefers-reduced-motion: reduce) {
+  [class*="bg-[url('./hero-bg.png')]"] {
+    background-attachment: scroll;
+  }
+}
+
+/* 暗色模式下的背景图片调整 */
+@media (prefers-color-scheme: dark) {
+  [class*="bg-[url('./hero-bg.png')]"] {
+    filter: brightness(0.8) contrast(1.1);
   }
 }
 </style>
