@@ -2,7 +2,7 @@
   <div class="relative py-16 sm:py-24 overflow-hidden">
     <!-- 背景装饰 -->
     <div class="absolute inset-0 -z-10">
-      <div class="absolute inset-0 bg-[url('./hero-bg.png')] bg-cover bg-center bg-fixed bg-no-repeat transition-opacity duration-500 ease-in-out"></div>
+      <div class="absolute inset-0 bg-[url('https://s2.loli.net/2025/03/11/buWneUL4fy95sga.jpg')] bg-cover bg-center bg-fixed bg-no-repeat transition-opacity duration-500 ease-in-out"></div>
       <div class="absolute inset-0 bg-gradient-to-br from-violet-50/60 to-indigo-50/80  dark:to-indigo-950/90 backdrop-blur-[2px] transition-all duration-300"></div>
     </div>
 
