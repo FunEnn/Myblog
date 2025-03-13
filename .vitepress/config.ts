@@ -47,7 +47,7 @@ async function config() {
       [
         "script",
         {
-          src: "https://fastly.jsdelivr.net/gh/FunEnn/live2d-widget@v1.0.2/dist/autoload.js",
+          src: "https://fastly.jsdelivr.net/gh/FunEnn/live2d-widget@v1.0.3/dist/autoload.js",
           async: true,
           defer: true
         }
