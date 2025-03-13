@@ -103,7 +103,7 @@ const toggleGame = () => {
   if (isGameActive.value) {
     // 动态加载游戏脚本
     const script = document.createElement('script')
-    script.src = 'http://www.websiteasteroids.com/asteroids.min.js'
+    script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/asteroids/asteroids.js'
     script.async = true
     script.defer = true
     document.head.appendChild(script)
