@@ -52,6 +52,35 @@
           </a>
         </div>
 
+        <!-- 游戏控制按钮 -->
+        <div class="mt-8">
+          <button 
+            @click="toggleGame"
+            class="px-6 py-3 text-sm font-medium rounded-full 
+                   bg-gradient-to-r from-violet-500 to-indigo-500
+                   text-white shadow-md hover:shadow-lg
+                   transition-all duration-300 hover:-translate-y-1
+                   flex items-center gap-2 mx-auto"
+          >
+            <span>{{ isGameActive ? '关闭游戏' : '开始游戏' }}</span>
+            <span class="text-lg">{{ isGameActive ? '🎮' : '🚀' }}</span>
+          </button>
+          
+          <!-- 游戏操作提示 -->
+          <div v-if="isGameActive" 
+               class="mt-4 text-sm text-gray-600 dark:text-gray-300 
+                      bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm 
+                      rounded-lg p-4 max-w-md mx-auto">
+            <h3 class="font-medium mb-2">游戏操作说明：</h3>
+            <ul class="space-y-1 text-left">
+              <li>🎮 方向键：控制飞船移动</li>
+              <li>💥 空格键：发射子弹</li>
+              <li>👁️ 按 B 键：显示敌人</li>
+              <li>❌ ESC 键：退出游戏</li>
+            </ul>
+          </div>
+        </div>
+
         <!-- 滚动提示 -->
         <div class="mt-16 animate-bounce">
           <svg class="w-6 h-6 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,6 +94,21 @@
 
 <script setup lang="ts">
 import { withBase } from 'vitepress'
+import { ref } from 'vue'
+
+const isGameActive = ref(false)
+
+const toggleGame = () => {
+  isGameActive.value = !isGameActive.value
+  if (isGameActive.value) {
+    // 动态加载游戏脚本
+    const script = document.createElement('script')
+    script.src = 'http://www.websiteasteroids.com/asteroids.min.js'
+    script.async = true
+    script.defer = true
+    document.head.appendChild(script)
+  }
+}
 
 const tags = [
   { text: '前端开发', icon: '🌟', color: 'sky' },
