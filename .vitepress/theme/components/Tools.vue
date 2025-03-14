@@ -1,28 +1,11 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { toolCategories } from '../tools'
-import { ref, onMounted, onUnmounted, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-// 使用防抖优化滚动事件
-const debounce = (fn: Function, delay: number) => {
-  let timer: NodeJS.Timeout | null = null
-  return function(...args: any[]) {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-      fn.apply(this, args)
-    }, delay)
-  }
-}
-
-const activeCategory = shallowRef(toolCategories[0].title)
+const activeCategory = ref(toolCategories[0].title)
 const showMobileNav = ref(false)
 const showBackToTop = ref(false)
-
-// 优化滚动事件处理
-const handleScroll = debounce(() => {
-  showBackToTop.value = window.scrollY > 300
-  updateActiveCategory()
-}, 100)
 
 const scrollToCategory = (categoryTitle: string) => {
   const element = document.getElementById(categoryTitle)
@@ -34,8 +17,9 @@ const scrollToCategory = (categoryTitle: string) => {
 }
 
 const updateActiveCategory = () => {
-  const scrollPosition = window.scrollY + 100
+  const scrollPosition = window.scrollY + 100 // 添加偏移量以提前激活
   
+  // 从后往前遍历，这样可以正确处理重叠的情况
   for (let i = toolCategories.length - 1; i >= 0; i--) {
     const category = toolCategories[i]
     const element = document.getElementById(category.title)
@@ -48,11 +32,17 @@ const updateActiveCategory = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('scroll', () => {
+    showBackToTop.value = window.scrollY > 300
+    updateActiveCategory()
+  })
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', () => {
+    showBackToTop.value = window.scrollY > 300
+    updateActiveCategory()
+  })
 })
 
 const scrollToTop = () => {
