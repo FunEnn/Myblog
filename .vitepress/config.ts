@@ -119,8 +119,7 @@ async function config() {
         rollupOptions: {
           output: {
             manualChunks: {
-              'dayjs': ['dayjs'],
-              'vue': ['vue', 'vue-router']
+              manualChunks: undefined
             }
           }
         }
