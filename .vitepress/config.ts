@@ -118,9 +118,7 @@ async function config() {
         cssMinify: true,
         rollupOptions: {
           output: {
-            manualChunks: {
-              manualChunks: undefined
-            }
+            manualChunks: undefined
           }
         }
       },
