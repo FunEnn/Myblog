@@ -2,7 +2,7 @@
   <div class="relative py-16 sm:py-24 overflow-hidden">
     <!-- 背景装饰 -->
     <div class="absolute inset-0 -z-10">
-      <div class="absolute inset-0 bg-[url('https://s2.loli.net/2025/03/11/buWneUL4fy95sga.jpg')] bg-cover bg-center bg-fixed bg-no-repeat transition-opacity duration-500 ease-in-out"></div>
+      <div class="absolute inset-0 bg-hero-pattern bg-cover bg-center bg-fixed bg-no-repeat transition-opacity duration-500 ease-in-out"></div>
       <div class="absolute inset-0 bg-gradient-to-br from-violet-50/60 to-indigo-50/80  dark:to-indigo-950/90 backdrop-blur-[2px] transition-all duration-300"></div>
     </div>
 
@@ -94,21 +94,45 @@
 
 <script setup lang="ts">
 import { withBase } from 'vitepress'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useIntersectionObserver } from '@vueuse/core'
 
 const isGameActive = ref(false)
+const heroRef = ref<HTMLElement | null>(null)
 
-const toggleGame = () => {
-  isGameActive.value = !isGameActive.value
-  if (isGameActive.value) {
-    // 动态加载游戏脚本
+// 懒加载游戏脚本
+const loadGameScript = () => {
+  return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.src = 'https://fastly.jsdelivr.net/gh/stevenjoezhang/asteroids/asteroids.js'
     script.async = true
     script.defer = true
+    script.onload = resolve
+    script.onerror = reject
     document.head.appendChild(script)
+  })
+}
+
+const toggleGame = async () => {
+  isGameActive.value = !isGameActive.value
+  if (isGameActive.value) {
+    try {
+      await loadGameScript()
+    } catch (error) {
+      console.error('Failed to load game script:', error)
+      isGameActive.value = false
+    }
   }
 }
+
+// 预加载背景图片
+onMounted(() => {
+  const img = new Image()
+  img.src = 'https://s2.loli.net/2025/03/11/buWneUL4fy95sga.jpg'
+  img.onload = () => {
+    document.documentElement.style.setProperty('--hero-bg-image', `url(${img.src})`)
+  }
+})
 
 const tags = [
   { text: '前端开发', icon: '🌟', color: 'sky' },
@@ -127,67 +151,46 @@ const quickLinks = [
 ]
 </script>
 
-<style scoped>
+<style>
+/* 关键CSS */
+:root {
+  --hero-bg-image: none;
+}
+
+.bg-hero-pattern {
+  background-image: var(--hero-bg-image);
+}
+
+/* 非关键CSS */
 .tag-bounce {
+  will-change: transform;
+  transform: translateZ(0);
   animation: bounce 3s infinite;
 }
 
 @keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
-/* 为每个标签添加不同的动画延迟 */
-.animate-bounce-delay-0 { animation-delay: 0s; }
-.animate-bounce-delay-1 { animation-delay: 0.2s; }
-.animate-bounce-delay-2 { animation-delay: 0.4s; }
-.animate-bounce-delay-3 { animation-delay: 0.6s; }
-.animate-bounce-delay-4 { animation-delay: 0.8s; }
-.animate-bounce-delay-5 { animation-delay: 1s; }
-
-/* 优化动画性能 */
-.tag-bounce {
-  will-change: transform;
-  transform: translateZ(0);
+/* 延迟加载的动画CSS */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-bounce-delay-0 { animation-delay: 0s; }
+  .animate-bounce-delay-1 { animation-delay: 0.2s; }
+  .animate-bounce-delay-2 { animation-delay: 0.4s; }
+  .animate-bounce-delay-3 { animation-delay: 0.6s; }
+  .animate-bounce-delay-4 { animation-delay: 0.8s; }
+  .animate-bounce-delay-5 { animation-delay: 1s; }
 }
 
-/* 响应式调整 */
+/* 响应式和性能优化 */
 @media (max-width: 640px) {
-  .tag-bounce {
-    animation: none;
-  }
+  .tag-bounce { animation: none; }
+  .bg-hero-pattern { background-attachment: scroll; }
 }
 
-/* 背景图片响应式适配 */
-@media (max-width: 640px) {
-  [class*="bg-[url('./hero-bg.png')]"] {
-    background-attachment: scroll;
-    background-position: center 30%;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 1024px) {
-  [class*="bg-[url('./hero-bg.png')]"] {
-    background-position: center;
-    background-attachment: fixed;
-  }
-}
-
-/* 优化背景图片加载 */
 @media (prefers-reduced-motion: reduce) {
-  [class*="bg-[url('./hero-bg.png')]"] {
-    background-attachment: scroll;
-  }
-}
-
-/* 暗色模式下的背景图片调整 */
-@media (prefers-color-scheme: dark) {
-  [class*="bg-[url('./hero-bg.png')]"] {
-    filter: brightness(0.8) contrast(1.1);
-  }
+  .tag-bounce { animation: none; }
+  .bg-hero-pattern { background-attachment: scroll; }
 }
 </style>
