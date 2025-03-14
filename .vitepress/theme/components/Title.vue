@@ -1,30 +1,44 @@
 <template>
-  <h1 class="title">{{ pageData.title }}</h1>
-  <div class="date">🕒 Published at: {{ publishDate }}</div>
+  <div class="title-container">
+    <h1 class="title">{{ pageData?.title }}</h1>
+    <div class="date">🕒 Published at: {{ publishDate }}</div>
+  </div>
 </template>
+
 <script lang="ts" setup>
 import { useData, onContentUpdated } from "vitepress";
-import { ref, reactive } from "vue";
-
+import { ref, computed } from "vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-type pageData = {
+
+interface PageData {
   description: string;
   title: string;
-  frontmatter: object;
-  headers: object[];
+  frontmatter: {
+    date?: string;
+    [key: string]: any;
+  };
+  headers: any[];
   lastUpdated: number;
   relativePath: string;
-};
-const pageData: pageData = useData().page;
-const publishDate = ref("");
+}
+
+const { page } = useData();
 dayjs.extend(relativeTime);
-onContentUpdated(() => {
-  const { frontmatter } = pageData.value;
-  publishDate.value = dayjs().to(dayjs(frontmatter.date || Date.now()));
+
+// 使用计算属性优化数据处理
+const pageData = computed(() => page.value as PageData);
+const publishDate = computed(() => {
+  const date = pageData.value?.frontmatter?.date;
+  return date ? dayjs().to(dayjs(date)) : dayjs().to(dayjs());
 });
 </script>
+
 <style scoped>
+.title-container {
+  margin-bottom: 2rem;
+}
+
 .title {
   color: var(--vp-c-text-1);
   font-weight: 600;
@@ -36,12 +50,15 @@ onContentUpdated(() => {
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Noto Color Emoji";
+  will-change: transform;
 }
+
 .date {
   font-size: 0.875rem;
   line-height: 1.25rem;
   margin-bottom: 1em;
   padding-bottom: 1em;
   border-bottom: 1px dashed #c7c7c7;
+  opacity: 0.8;
 }
 </style>

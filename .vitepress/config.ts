@@ -118,7 +118,10 @@ async function config() {
         cssMinify: true,
         rollupOptions: {
           output: {
-            manualChunks: undefined
+            manualChunks: {
+              'dayjs': ['dayjs'],
+              'vue': ['vue', 'vue-router']
+            }
           }
         }
       },

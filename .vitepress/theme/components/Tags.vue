@@ -6,7 +6,7 @@
         Tags Collection
       </h1>
       <p class="mt-4 text-gray-600 dark:text-gray-400">
-        发现 {{ data ? Object.keys(data).length : 0 }} 个分类，共 {{ getTotalPosts() }} 篇文章
+        发现 {{ tagCount }} 个分类，共 {{ totalPosts }} 篇文章
       </p>
       <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-20 h-1 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
     </div>
@@ -16,29 +16,29 @@
                 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none backdrop-blur-sm mb-8">
       <div class="flex flex-wrap gap-3 justify-center">
         <button
-          v-for="(item, key) in data"
-          :key="key"
-          @click="toggleTag(key)"
+          v-for="(posts, tag) in data"
+          :key="tag"
+          @click="toggleTag(tag)"
           :class="[
             'relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300',
             'hover:scale-105 hover:shadow-sm',
-            selectTag === key 
+            selectTag === tag 
               ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md shadow-indigo-500/20' 
               : 'bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600/50'
           ]"
-          :style="getFontSize(item.length)"
+          :style="getFontSize(posts.length)"
         >
-          <span class="relative z-10">{{ key }}</span>
+          <span class="relative z-10">{{ tag }}</span>
           <span class="absolute -top-1.5 -right-1.5 w-4 h-4 flex items-center justify-center text-[10px] font-bold
                      bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 rounded-full border border-indigo-100 dark:border-indigo-900">
-            {{ item.length }}
+            {{ posts.length }}
           </span>
         </button>
       </div>
     </div>
 
     <!-- 文章列表 -->
-    <div v-if="selectTag && data && data[selectTag]" 
+    <div v-if="selectTag && selectedPosts.length" 
          class="p-8 rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 
                 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none backdrop-blur-sm">
       <h4 class="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
@@ -50,13 +50,13 @@
         </div>
         {{ selectTag }}
         <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          ({{ data[selectTag].length }} 篇文章)
+          ({{ selectedPosts.length }} 篇文章)
         </span>
       </h4>
 
       <div class="space-y-4">
-        <a v-for="(article, index) in data[selectTag]"
-           :key="index"
+        <a v-for="article in selectedPosts"
+           :key="article.regularPath"
            :href="withBase(article.regularPath)"
            class="group block p-4 rounded-xl hover:bg-gradient-to-r hover:from-gray-50 hover:to-transparent 
                   dark:hover:from-gray-800/30 dark:hover:to-transparent transition-all duration-300"
@@ -88,39 +88,68 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, shallowRef } from "vue";
 import { useData, withBase } from "vitepress";
 import { initTags } from "../utils";
 
+interface Post {
+  regularPath: string;
+  frontMatter: {
+    title: string;
+    date?: string;
+    description?: string;
+  };
+}
+
+interface TagData {
+  [key: string]: Post[];
+}
+
 const { theme } = useData();
-const data = computed(() => {
+
+// 使用shallowRef优化大数据集的响应式
+const selectTag = shallowRef("");
+
+// 使用计算属性并添加缓存
+const data = computed<TagData>(() => {
   return theme.value.posts ? initTags(theme.value.posts) : {};
 });
-const selectTag = ref("");
 
+// 缓存标签数量
+const tagCount = computed(() => Object.keys(data.value).length);
+const totalPosts = computed(() => {
+  if (!data.value) return 0;
+  return Object.values(data.value).reduce((acc, curr) => acc + curr.length, 0);
+});
+
+// 优化切换标签的性能
 const toggleTag = (tag: string) => {
   selectTag.value = selectTag.value === tag ? "" : tag;
 };
 
+// 优化字体大小计算
 const getFontSize = (length: number) => {
-  let size = length * 0.01 + 0.9;  // 调整字体大小的计算方式，使基础大小更小
+  const size = Math.min(Math.max(length * 0.01 + 0.9, 0.8), 1.5);
   return { fontSize: `${size}em` };
 };
 
-const getTotalPosts = () => {
-  if (!data.value) return 0;
-  return Object.values(data.value).reduce((acc, curr) => acc + curr.length, 0);
+// 优化日期格式化
+const dateFormatter = new Intl.DateTimeFormat('zh-CN', { 
+  year: 'numeric', 
+  month: 'short', 
+  day: 'numeric' 
+});
+
+const formatDate = (date?: string) => {
+  if (!date) return '';
+  return dateFormatter.format(new Date(date));
 };
 
-const formatDate = (date: string) => {
-  if (!date) return '';
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  };
-  return new Date(date).toLocaleDateString('zh-CN', options);
-};
+// 计算当前选中标签的文章
+const selectedPosts = computed(() => {
+  if (!selectTag.value || !data.value) return [];
+  return data.value[selectTag.value] || [];
+});
 </script>
 
 <style scoped>
@@ -196,5 +225,25 @@ const formatDate = (date: string) => {
 }
 .date {
   font-family: Georgia, sans-serif;
+}
+
+.title-container {
+  margin-bottom: 2rem;
+}
+
+/* 优化动画性能 */
+.group {
+  will-change: transform, opacity;
+}
+
+/* 优化渐变动画性能 */
+.bg-gradient-to-r {
+  will-change: background-position;
+  background-size: 200% 100%;
+  transition: background-position 0.3s ease;
+}
+
+.group:hover .bg-gradient-to-r {
+  background-position: 100% 0;
 }
 </style>
