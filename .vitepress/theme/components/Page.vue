@@ -36,18 +36,19 @@
                 {{ transDate(item.frontMatter.date) }}
               </time>
               
-              <!-- 标签 -->
-              <div class="flex items-center gap-2">
+              <!-- 标签 - 优化 v-if 和 v-for 的使用 -->
+              <div v-if="item.frontMatter.tags && item.frontMatter.tags.length" class="flex items-center gap-2">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
                   <path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.995 1.995 0 013 12V7a4 4 0 014-4z" 
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span v-if="item.frontMatter.tags" 
-                      v-for="tag in item.frontMatter.tags" 
-                      :key="tag"
-                      class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-400">
-                  {{ tag }}
-                </span>
+                <div class="flex gap-2 flex-wrap">
+                  <span v-for="tag in item.frontMatter.tags" 
+                        :key="tag"
+                        class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-400">
+                    {{ tag }}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -59,15 +60,15 @@
           </a>
         </div>
         
-        <!-- 分页 -->
-        <div class="flex items-center justify-center gap-4 mt-8">
+        <!-- 分页 - 使用计算属性优化判断逻辑 -->
+        <div v-if="pagesNum > 1" class="flex items-center justify-center gap-4 mt-8">
           <button v-if="pageCurrent > 1" 
                   @click="go(pageCurrent - 1)"
                   class="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 
                          hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-colors">
             ← Previous
           </button>
-          <span v-if="pagesNum > 1" class="text-sm text-gray-500">
+          <span class="text-sm text-gray-500">
             {{ pageCurrent }}/{{ pagesNum }}
           </span>
           <button v-if="pageCurrent < pagesNum" 
@@ -103,10 +104,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import ShareCard from "./ShareCard.vue";
-import Projects from "./Projects.vue";
-import { useData, withBase } from "vitepress";
+import { ref, defineAsyncComponent, computed } from 'vue'
+import type { Ref } from 'vue'
+import { useData, withBase } from 'vitepress'
+
+// 使用带选项的异步组件定义，添加加载延迟以避免闪烁
+const ShareCard = defineAsyncComponent({
+  loader: () => import('./ShareCard.vue'),
+  delay: 200,
+  timeout: 3000
+})
+
+const Projects = defineAsyncComponent({
+  loader: () => import('./Projects.vue'),
+  delay: 200,
+  timeout: 3000
+})
+
 interface Theme {
   posts: Post[]
   postLength: number
@@ -114,67 +128,72 @@ interface Theme {
 }
 
 interface Post {
-  regularPath: string;
+  regularPath: string
   frontMatter: {
-    title: string;
-    date: string;
-    tags?: string[];
-    description?: string;
-  };
-}
-
-const { theme } = useData();
-
-// get posts
-let postsAll = (theme.value as Theme).posts || [];
-// get postLength
-let postLength = (theme.value as Theme).postLength;
-// get pageSize
-let pageSize = (theme.value as Theme).pageSize;
-
-//  pagesNum
-let pagesNum =
-  postLength % pageSize === 0
-    ? postLength / pageSize
-    : postLength / pageSize + 1;
-pagesNum = parseInt(pagesNum.toString());
-//pageCurrent
-let pageCurrent = ref(1);
-// filter index post
-postsAll = postsAll.filter((item: Post) => {
-  return item.regularPath.indexOf("index") < 0;
-});
-// pagination
-let allMap = {};
-for (let i = 0; i < pagesNum; i++) {
-  allMap[i] = [];
-}
-let index = 0;
-for (let i = 0; i < postsAll.length; i++) {
-  if (allMap[index].length > pageSize - 1) {
-    index += 1;
+    title: string
+    date: string
+    tags?: string[]
+    description?: string
   }
-  allMap[index].push(postsAll[i]);
 }
-// set posts
-let posts = ref<Post[]>([]);
-posts.value = allMap[pageCurrent.value - 1];
 
-// click pagination
-const go = (i) => {
-  pageCurrent.value = i;
-  posts.value = allMap[pageCurrent.value - 1];
-};
-// timestamp transform
-const transDate = (date: string) => {
-  const dateArray = date.split("-");
+// 使用类型断言确保 theme 的类型正确
+const { theme } = useData<{ theme: Theme }>()
+
+// 使用 computed 优化数据计算
+const postsAll = computed(() => 
+  (theme.value.posts || []).filter((item: Post) => !item.regularPath.includes('index'))
+)
+
+const postLength = computed(() => theme.value.postLength)
+const pageSize = computed(() => theme.value.pageSize)
+
+// 优化分页计算逻辑
+const pagesNum = computed(() => {
+  const num = Math.ceil(postLength.value / pageSize.value)
+  return Number.isNaN(num) ? 1 : num
+})
+
+const pageCurrent = ref(1)
+
+// 使用 Record 类型优化 allMap 的类型定义
+const allMap: Record<number, Post[]> = computed(() => {
+  const map: Record<number, Post[]> = {}
+  let index = 0
+  
+  postsAll.value.forEach((post: Post) => {
+    if (!map[index]) {
+      map[index] = []
+    }
+    
+    if (map[index].length >= pageSize.value) {
+      index++
+      map[index] = []
+    }
+    
+    map[index].push(post)
+  })
+  
+  return map
+}).value
+
+const posts: Ref<Post[]> = ref([])
+posts.value = allMap[pageCurrent.value - 1] || []
+
+const go = (i: number) => {
+  pageCurrent.value = i
+  posts.value = allMap[pageCurrent.value - 1] || []
+}
+
+const transDate = (date: string): string => {
+  const dateArray = date.split('-')
   const months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
-  const month = months[parseInt(dateArray[1]) - 1];
-  return `${month} ${dateArray[2]}, ${dateArray[0]}`;
-};
+  ]
+  const month = months[parseInt(dateArray[1]) - 1]
+  return `${month} ${dateArray[2]}, ${dateArray[0]}`
+}
 </script>
 
 <style scoped>

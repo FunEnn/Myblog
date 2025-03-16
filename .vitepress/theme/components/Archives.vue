@@ -17,9 +17,11 @@
       <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-indigo-500/50 via-purple-500/20 to-transparent"></div>
 
       <!-- 年份分组 -->
-      <div v-for="yearGroup in groupedPosts" 
+      <div v-for="(yearGroup, yearIndex) in groupedPosts" 
            :key="yearGroup.year" 
-           class="relative mb-16 last:mb-0 pl-8">
+           class="relative mb-16 last:mb-0 pl-8 fade-up-element"
+           :class="{ 'is-visible': visibleElements.has(`year-${yearIndex}`) }"
+           :data-key="`year-${yearIndex}`">
         <!-- 年份标记点 -->
         <div class="absolute -left-[5px] top-0 w-3 h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 ring-4 ring-indigo-500/20"></div>
         
@@ -35,9 +37,11 @@
 
         <!-- 月份分组 -->
         <div class="space-y-8">
-          <div v-for="monthGroup in yearGroup.months" 
+          <div v-for="(monthGroup, monthIndex) in yearGroup.months" 
                :key="`${yearGroup.year}-${monthGroup.month}`" 
-               class="relative">
+               class="relative fade-up-element"
+               :class="{ 'is-visible': visibleElements.has(`month-${yearIndex}-${monthIndex}`) }"
+               :data-key="`month-${yearIndex}-${monthIndex}`">
             <!-- 月份标题 -->
             <div class="flex items-center gap-3 mb-4">
               <span class="text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
@@ -50,10 +54,12 @@
 
             <!-- 文章列表 -->
             <div class="space-y-3">
-              <a v-for="article in monthGroup.posts" 
+              <a v-for="(article, articleIndex) in monthGroup.posts" 
                  :key="article.regularPath"
                  :href="withBase(article.regularPath)"
-                 class="group block">
+                 class="group block fade-up-element"
+                 :class="{ 'is-visible': visibleElements.has(`article-${yearIndex}-${monthIndex}-${articleIndex}`) }"
+                 :data-key="`article-${yearIndex}-${monthIndex}-${articleIndex}`">
                 <div class="p-4 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800/50 
                            transition-all duration-300 
                            hover:border-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
@@ -85,11 +91,15 @@
 
 <script lang="js" setup>
 import { useData, withBase } from "vitepress";
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
+
 const { theme } = useData();
 
 // 计算文章总数
 const totalPosts = computed(() => theme.value.posts.length);
+
+// 存储可见元素的 Map
+const visibleElements = ref(new Set());
 
 // 按年月对文章进行分组
 const groupedPosts = computed(() => {
@@ -126,9 +136,41 @@ const groupedPosts = computed(() => {
         .sort((a, b) => b.month - a.month)
     }));
 });
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        visibleElements.value.add(entry.target.dataset.key);
+        visibleElements.value = new Set(visibleElements.value);
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  // 观察所有需要动画的元素
+  document.querySelectorAll('.fade-up-element').forEach(el => {
+    observer.observe(el);
+  });
+});
 </script>
 
 <style scoped>
+.fade-up-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
+  filter: blur(10px);
+}
+
+.fade-up-element.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@vueuse/components':
+        specifier: ^13.0.0
+        version: 13.0.0(vue@3.5.13(typescript@5.8.2))
       aos:
         specifier: ^2.3.4
         version: 2.3.4
@@ -643,6 +646,11 @@ packages:
 
   '@vue/shared@3.5.13':
     resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
+
+  '@vueuse/components@13.0.0':
+    resolution: {integrity: sha512-rcGp3c5Yu4SVLGUhBXT0q227nduFx1HTKzJBQkPLpIhwG1SB8RZ5bbri9sbusGaFZB5CYc6jza5+gfSJ7YidIg==}
+    peerDependencies:
+      vue: ^3.5.0
 
   '@vueuse/core@10.11.1':
     resolution: {integrity: sha512-guoy26JQktXPcz+0n3GukWIy/JDNKti9v6VEMu6kV2sYBsWuGiTU8OWdg+ADfUbHg3/3DlqySDe7JmdHrktiww==}
@@ -3090,6 +3098,12 @@ snapshots:
       vue: 3.5.13(typescript@5.8.2)
 
   '@vue/shared@3.5.13': {}
+
+  '@vueuse/components@13.0.0(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      '@vueuse/core': 13.0.0(vue@3.5.13(typescript@5.8.2))
+      '@vueuse/shared': 13.0.0(vue@3.5.13(typescript@5.8.2))
+      vue: 3.5.13(typescript@5.8.2)
 
   '@vueuse/core@10.11.1(vue@3.5.13(typescript@5.8.2))':
     dependencies:

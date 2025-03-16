@@ -6,7 +6,7 @@
         Tags Collection
       </h1>
       <p class="mt-4 text-gray-600 dark:text-gray-400">
-        发现 {{ data ? Object.keys(data).length : 0 }} 个分类，共 {{ getTotalPosts() }} 篇文章
+        发现 {{ Object.keys(data).length }} 个分类，共 {{ getTotalPosts() }} 篇文章
       </p>
       <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-20 h-1 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
     </div>
@@ -16,29 +16,29 @@
                 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none backdrop-blur-sm mb-8">
       <div class="flex flex-wrap gap-3 justify-center">
         <button
-          v-for="(item, key) in data"
-          :key="key"
-          @click="toggleTag(key)"
+          v-for="(posts, tag) in data"
+          :key="tag"
+          @click="toggleTag(tag)"
           :class="[
             'relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300',
             'hover:scale-105 hover:shadow-sm',
-            selectTag === key 
+            selectTag === tag 
               ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md shadow-indigo-500/20' 
               : 'bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600/50'
           ]"
-          :style="getFontSize(item.length)"
+          :style="getFontSize(posts.length)"
         >
-          <span class="relative z-10">{{ key }}</span>
+          <span class="relative z-10">{{ tag }}</span>
           <span class="absolute -top-1.5 -right-1.5 w-4 h-4 flex items-center justify-center text-[10px] font-bold
                      bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 rounded-full border border-indigo-100 dark:border-indigo-900">
-            {{ item.length }}
+            {{ posts.length }}
           </span>
         </button>
       </div>
     </div>
 
     <!-- 文章列表 -->
-    <div v-if="selectTag && data && data[selectTag]" 
+    <div v-if="selectTag && data[selectTag]" 
          class="p-8 rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-800 
                 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none backdrop-blur-sm">
       <h4 class="flex items-center gap-3 text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
@@ -92,11 +92,24 @@ import { computed, ref } from "vue";
 import { useData, withBase } from "vitepress";
 import { initTags } from "../utils";
 
+interface Post {
+  regularPath: string;
+  frontMatter: {
+    title: string;
+    date: string;
+    description?: string;
+  };
+}
+
+interface TagData {
+  [key: string]: Post[];
+}
+
 const { theme } = useData();
-const data = computed(() => {
+const data = computed<TagData>(() => {
   return theme.value.posts ? initTags(theme.value.posts) : {};
 });
-const selectTag = ref("");
+const selectTag = ref<string>("");
 
 const toggleTag = (tag: string) => {
   selectTag.value = selectTag.value === tag ? "" : tag;
@@ -109,7 +122,7 @@ const getFontSize = (length: number) => {
 
 const getTotalPosts = () => {
   if (!data.value) return 0;
-  return Object.values(data.value).reduce((acc, curr) => acc + curr.length, 0);
+  return Object.values(data.value).reduce((acc, curr: Post[]) => acc + curr.length, 0);
 };
 
 const formatDate = (date: string) => {

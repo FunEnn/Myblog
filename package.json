@@ -31,6 +31,7 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
+    "@vueuse/components": "^13.0.0",
     "aos": "^2.3.4",
     "gitalk": "^1.8.0",
     "lodash-es": "^4.17.21"
