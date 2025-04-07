@@ -200,9 +200,10 @@ const quickLinks = [
 </script>
 
 <style>
-/* 关键CSS */
+/* 使用 CSS 变量优化主题切换 */
 :root {
-  --hero-bg-image: none;
+  --hero-bg-image: url('https://s2.loli.net/2025/03/11/buWneUL4fy95sga.jpg');
+  --animation-duration: 3s;
 }
 
 .bg-hero-pattern {

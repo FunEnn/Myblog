@@ -52,3 +52,25 @@ git push -u origin <分支名>
 git push origin --delete <分支名>
 ```
 
+## 2、提交
+
+**取消上一次提交**
+
+```bash
+git reset --soft HEAD~1
+```
+
+**暂存修改**
+
+```bash
+git stash
+git stash save "备注"  
+```
+
+**获取暂存**
+
+```bash
+git stash list            # 查看暂存列表
+git stash pop 
+```
+
