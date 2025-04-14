@@ -83,8 +83,8 @@ async function config() {
         },
       ],
       socialLinks: [{ icon: "github", link: "https://github.com/FunEnn" }],
-      // outline: 2, //设置右侧aside显示层级
-      aside: false,
+      outline: 2, //设置右侧aside显示层级
+      aside: true,
       // blogs page show firewokrs animation
     },
     buildEnd: async () => {
