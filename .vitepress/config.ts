@@ -44,14 +44,14 @@ async function config() {
           content: "Home of FunEnn",
         },
       ],
-      [
-        "script",
-        {
-          src: "https://fastly.jsdelivr.net/gh/FunEnn/live2d-widget@v1.0.11/dist/autoload.js",
-          async: true,
-          defer: true
-        }
-      ]
+      // [
+      //   "script",
+      //   {
+      //     src: "https://fastly.jsdelivr.net/gh/FunEnn/live2d-widget@v1.0.11/dist/autoload.js",
+      //     async: true,
+      //     defer: true
+      //   }
+      // ]
     ],
     cleanUrls: true,
     lastUpdated: false,

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
     <!-- 顶部统计信息 -->
-    <div class="relative mb-12 text-center">
+    <div class="relative mb-12 text-center fade-in" :class="{ 'show': isVisible['header'] }">
       <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
         文章归档
       </h1>
@@ -16,73 +16,52 @@
       <!-- 垂直线 -->
       <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-indigo-500/50 via-purple-500/20 to-transparent"></div>
 
-      <!-- 年份分组 -->
-      <div v-for="(yearGroup, yearIndex) in groupedPosts" 
-           :key="yearGroup.year" 
-           class="relative mb-16 last:mb-0 pl-8 fade-up-element"
-           :class="{ 'is-visible': visibleElements.has(`year-${yearIndex}`) }"
-           :data-key="`year-${yearIndex}`">
-        <!-- 年份标记点 -->
+      <!-- 年月分组 -->
+      <div v-for="group in sortedGroups" 
+           :key="group.key"
+           class="relative mb-16 last:mb-0 pl-8 fade-in"
+           :class="{ 'show': isVisible[group.key] }"
+           ref="groupRefs">
+        <!-- 年月标记点 -->
         <div class="absolute -left-[5px] top-0 w-3 h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 ring-4 ring-indigo-500/20"></div>
         
-        <!-- 年份标题 -->
+        <!-- 年月标题 -->
         <div class="flex items-center gap-4 mb-8">
           <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">
-            {{ yearGroup.year }}
+            {{ group.year }}年{{ group.month.toString().padStart(2, '0') }}月
           </h2>
           <div class="text-sm text-gray-500 dark:text-gray-400">
-            {{ yearGroup.months.reduce((acc, month) => acc + month.posts.length, 0) }} 篇
+            {{ group.posts.length }} 篇
           </div>
         </div>
 
-        <!-- 月份分组 -->
-        <div class="space-y-8">
-          <div v-for="(monthGroup, monthIndex) in yearGroup.months" 
-               :key="`${yearGroup.year}-${monthGroup.month}`" 
-               class="relative fade-up-element"
-               :class="{ 'is-visible': visibleElements.has(`month-${yearIndex}-${monthIndex}`) }"
-               :data-key="`month-${yearIndex}-${monthIndex}`">
-            <!-- 月份标题 -->
-            <div class="flex items-center gap-3 mb-4">
-              <span class="text-lg font-medium bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
-                {{ monthGroup.month.toString().padStart(2, '0') }}月
-              </span>
-              <span class="text-sm text-gray-500 dark:text-gray-400">
-                {{ monthGroup.posts.length }} 篇
-              </span>
-            </div>
-
-            <!-- 文章列表 -->
-            <div class="space-y-3">
-              <a v-for="(article, articleIndex) in monthGroup.posts" 
-                 :key="article.regularPath"
-                 :href="withBase(article.regularPath)"
-                 class="group block fade-up-element"
-                 :class="{ 'is-visible': visibleElements.has(`article-${yearIndex}-${monthIndex}-${articleIndex}`) }"
-                 :data-key="`article-${yearIndex}-${monthIndex}-${articleIndex}`">
-                <div class="p-4 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800/50 
-                           transition-all duration-300 
-                           hover:border-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                  <div class="flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-3 min-w-0">
-                      <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 opacity-50 
-                                transition-all duration-300 
-                                group-hover:scale-125 group-hover:opacity-100"></div>
-                      <span class="text-gray-700 dark:text-gray-300 
-                                 group-hover:text-transparent group-hover:bg-clip-text 
-                                 group-hover:bg-gradient-to-r group-hover:from-indigo-500 group-hover:to-purple-500 
-                                 transition-colors duration-300 truncate">
-                        {{ article.frontMatter.title }}
-                      </span>
-                    </div>
-                    <time class="text-sm text-gray-500 dark:text-gray-400 font-mono whitespace-nowrap">
-                      {{ article.frontMatter.date.slice(8, 10) }}日
-                    </time>
-                  </div>
+        <!-- 文章列表 -->
+        <div class="space-y-3">
+          <a v-for="article in group.posts" 
+             :key="article.regularPath"
+             :href="withBase(article.regularPath)"
+             class="group block">
+            <div class="p-4 rounded-xl border border-transparent bg-gray-50 dark:bg-gray-800/50 
+                       transition-all duration-300 
+                       hover:border-indigo-500/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+              <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 opacity-50 
+                            transition-all duration-300 
+                            group-hover:scale-125 group-hover:opacity-100"></div>
+                  <span class="text-gray-700 dark:text-gray-300 
+                             group-hover:text-transparent group-hover:bg-clip-text 
+                             group-hover:bg-gradient-to-r group-hover:from-indigo-500 group-hover:to-purple-500 
+                             transition-colors duration-300 truncate">
+                    {{ article.frontMatter.title }}
+                  </span>
                 </div>
-              </a>
+                <time class="text-sm text-gray-500 dark:text-gray-400 font-mono whitespace-nowrap">
+                  {{ article.frontMatter.date.slice(8, 10) }}日
+                </time>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -94,15 +73,14 @@ import { useData, withBase } from "vitepress";
 import { computed, ref, onMounted } from "vue";
 
 const { theme } = useData();
+const groupRefs = ref([]);
+const isVisible = ref({});
 
 // 计算文章总数
 const totalPosts = computed(() => theme.value.posts.length);
 
-// 存储可见元素的 Map
-const visibleElements = ref(new Set());
-
 // 按年月对文章进行分组
-const groupedPosts = computed(() => {
+const sortedGroups = computed(() => {
   const posts = theme.value.posts;
   const groups = {};
 
@@ -110,79 +88,73 @@ const groupedPosts = computed(() => {
     const date = new Date(post.frontMatter.date);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
+    const key = `${year}-${month}`;
 
-    if (!groups[year]) {
-      groups[year] = {
+    if (!groups[key]) {
+      groups[key] = {
+        key,
         year,
-        months: {}
-      };
-    }
-
-    if (!groups[year].months[month]) {
-      groups[year].months[month] = {
         month,
         posts: []
       };
     }
 
-    groups[year].months[month].posts.push(post);
+    groups[key].posts.push(post);
   });
 
   return Object.values(groups)
-    .sort((a, b) => b.year - a.year)
-    .map(yearGroup => ({
-      ...yearGroup,
-      months: Object.values(yearGroup.months)
-        .sort((a, b) => b.month - a.month)
-    }));
+    .sort((a, b) => {
+      if (a.year !== b.year) return b.year - a.year;
+      return b.month - a.month;
+    });
 });
 
+// 处理滚动动画
 onMounted(() => {
+  // 立即显示头部
+  isVisible.value['header'] = true;
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        visibleElements.value.add(entry.target.dataset.key);
-        visibleElements.value = new Set(visibleElements.value);
+        const key = entry.target.__key;
+        isVisible.value[key] = true;
       }
     });
   }, {
-    threshold: 0.1
+    threshold: 0.1,
+    rootMargin: '-50px 0px'
   });
 
-  // 观察所有需要动画的元素
-  document.querySelectorAll('.fade-up-element').forEach(el => {
-    observer.observe(el);
-  });
+  // 等待 DOM 更新后设置观察者
+  setTimeout(() => {
+    groupRefs.value.forEach((el, index) => {
+      if (el) {
+        el.__key = sortedGroups.value[index].key;
+        observer.observe(el);
+      }
+    });
+  }, 100);
 });
 </script>
 
 <style scoped>
-.fade-up-element {
+.fade-in {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   will-change: opacity, transform;
-  filter: blur(10px);
 }
 
-.fade-up-element.is-visible {
+.fade-in.show {
   opacity: 1;
   transform: translateY(0);
-  filter: blur(0);
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.yearItem {
-  animation: fadeInUp 0.5s ease-out forwards;
-}
+/* 为每个分组添加延迟 */
+.fade-in:nth-child(1) { transition-delay: 0.1s; }
+.fade-in:nth-child(2) { transition-delay: 0.2s; }
+.fade-in:nth-child(3) { transition-delay: 0.3s; }
+.fade-in:nth-child(4) { transition-delay: 0.4s; }
+.fade-in:nth-child(5) { transition-delay: 0.5s; }
 </style>
