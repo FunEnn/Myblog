@@ -91,16 +91,28 @@ BFC 原理，渲染规则：
 
 ### 解决垂直外边距重叠问题
 
-防止垂直 margin 合并
-
-- 父子元素垂直外边距重叠问题
-- 相邻元素垂直外边距重叠问题
-
-同一个 BFC 下的垂直 margin 会发生合并。所以如果让 2 个元素不在同一个 BFC 中即可阻止垂直 margin 合并。
+1. **父元素加overflow：hidden；**
+2. **父元素加边框 border**
+3. **父级或者子级设置display:inline-block;**
+4. **父级或者子级设置float**
+5. **父级或者子级设置position: absolute;**
 
 ### 清除内部浮动
 
 浮动造成的问题就是父元素高度坍塌，所以清除浮动需要解决的问题就是让父元素的高度恢复正常。而用 BFC 清除浮动的原理就是：计算 BFC 的高度时，浮动元素也参与计算。只要触发父元素的 BFC 即可。
 
-- 浮动元素造成父元素高度坍塌问题
-- 兄弟间，浮动元素与不浮动元素界限不清，重叠
+1. 父元素添加overflow:hidden
+
+2. 使用after伪元素清除浮动
+
+   ```css
+   .clearfix:after{/*伪元素是行内元素 正常浏览器清除浮动方法*/
+       content: "";
+       display: block;
+       height: 0;
+       clear: both;
+       visibility: hidden;
+   }
+   ```
+
+   

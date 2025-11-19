@@ -6,6 +6,8 @@ tags:
  - CSS
 ---
 
+[toc]
+
 ## 响应式
 
 [响应式设计](https://mp.weixin.qq.com/s/5N5ZMIzACWj08mrZAa7fKg)
@@ -41,3 +43,74 @@ tags:
 
 ```
 
+
+
+## css中可继承和不可继承的属性
+
+**可继承**：font, font-size, font-family, font-weight, font-style, text-indent, text-align, line-hight, word-spacing, color, visibility
+
+**不可继承**：display, width, height, margin, padding, border, background, position, float, top, left, bottom, right
+
+## 伪类和伪元素的区别
+
+伪类主要是为了选中元素的某种特殊状态，伪类用单冒号
+
+伪元素主要是为了创建DOM树以外的元素，伪元素用双冒号
+
+## CSS选择器
+
+ID选择器
+
+类选择器 伪类选择器 属性选择器
+
+元素选择器 伪元素选择器
+
+通配选择器
+
+子元素选择器 兄弟选择器 后代选择器
+
+交集选择器 并集选择器
+
+## CSS隐藏元素
+
+**display:none;**
+
+不占据空间，无法响应自身事件
+
+**position: absolute;+z-index : -9999;**
+
+不占据空间，无法响应自身事件
+
+**overflow:hidden;**
+
+隐藏元素溢出部分，依然占据空间，但无法响应自身事件
+
+**visibility:hidden;**
+
+依然占据空间，无法响应自身事件
+
+**transform:scale(0,0);**
+
+依然占据空间，无法响应自身事件
+
+**opacity:0;**
+
+透明度为0，依然占据空间，可响应自身事件
+
+## px em rem vw vh vmin vmax
+
+
+
+px：相对于显示器屏幕分辨率
+
+em：是相对长度，相对于自身的font-size，chrome默认16px
+
+rem：是相对长度，相对于根标签的font-size
+
+vw：相对视口宽度的1%
+
+vh：相对视口高度的1%
+
+vmin：相对视口高宽中较小值的1%
+
+vmax：相对视口高宽中较大值的1%

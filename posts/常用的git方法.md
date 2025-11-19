@@ -74,3 +74,23 @@ git stash list            # 查看暂存列表
 git stash pop 
 ```
 
+### 3、切换仓库
+
+**查看当前远程仓库地址**
+
+```bash
+git remote -v
+```
+
+**重命名远程仓库地址**
+
+```bash
+git remote set-url origin [new-url]
+```
+
+**推送**
+
+```bash
+git push -u origin "master"
+```
+

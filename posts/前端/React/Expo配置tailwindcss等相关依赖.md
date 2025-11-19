@@ -8,14 +8,15 @@ tags:
 
 [toc]
 
-## 1、配置tailwindCSS
+## 1、配置nativewind
 
-[Tailwind CSS - Expo 中文网 (nodejs.cn)](https://expo.nodejs.cn/guides/tailwind/)
+[Installation](https://www.nativewind.dev/docs/getting-started/installation)
 
-**v4配置**
+**配置**
 
 ```bash
-npx expo add tailwindcss @tailwindcss/postcss postcss -- --dev
+npm install nativewind react-native-reanimated@~3.17.4 react-native-safe-area-context@5.4.0
+npm install --dev tailwindcss@^3.4.17 prettier-plugin-tailwindcss@^0.5.11
 ```
 
 文件配置：
