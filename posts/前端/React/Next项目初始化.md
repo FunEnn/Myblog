@@ -10,7 +10,7 @@ tags:
 
 ## 1、创建项目
 
->`pnpm create next-app my-next-app`
+>`pnpm create next-app@latest my-next-app`
 >
 >`npx create-next-app@latest`
 
