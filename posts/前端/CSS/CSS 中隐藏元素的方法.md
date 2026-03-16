@@ -8,7 +8,7 @@ tags:
 
 [toc]
 
-### 1. 透明度控制：`opacity` 与 `filter: opacity()`
+## 1. 透明度控制：`opacity` 与 `filter: opacity()`
 
 这两者都可以使元素透明，但底层逻辑略有不同。
 
@@ -17,14 +17,14 @@ tags:
 
 > **注意**：如果元素隐藏后不希望被点击（如遮罩层后的按钮），`opacity: 0` 需要配合 `pointer-events: none`
 
-### 2. 空间占位：`display: none` 与 `visibility: hidden`
+## 2. 空间占位：`display: none` 与 `visibility: hidden`
 
 这是最基础的两种方法：
 
 - **`display: none`**：彻底移除。元素不占位，不响应事件。由于改变了布局，切换时会触发**重排（Reflow）**，性能开销最大
 - **`visibility: hidden`**：隐身。元素占位，但不响应事件
 
-### 3. 位移与缩放：`transform`
+## 3. 位移与缩放：`transform`
 
 利用硬件加速提升性能：
 
@@ -33,20 +33,20 @@ tags:
 
 > **优势**：由于元素处于独立的复合层，其动画处理极其流畅，不会引起周围元素的抖动
 
-### 4. 几何裁剪：`clip-path`
+## 4. 几何裁剪：`clip-path`
 
 通过 `clip-path: circle(0)` 或 `inset(100%)` 隐藏
 
 - **场景**：适用于需要特定形状展开动画的场景
 - **局限**：对低版本浏览器兼容性较差
 
-### 5. 层级遮盖：`z-index`
+## 5. 层级遮盖：`z-index`
 
 将 `z-index` 设置为负值，使其塌陷到背景层下方
 
 - **前提**：元素必须设置了非 `static` 的定位（如 `relative` 或 `absolute`）
 
-### 6. 物理尺寸收缩
+## 6. 物理尺寸收缩
 
 通过 `width: 0; height: 0; overflow: hidden;` 隐藏
 

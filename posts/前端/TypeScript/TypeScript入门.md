@@ -6,7 +6,9 @@ tags:
  - TypeScript
 ---
 
-# TypeScript
+[toc]
+
+## TypeScript
 
 - **TypeScript**：TS是JavaScript的超集，它引入了静态类型系统，允许开发者为变量、函数参数和返回值指定类型。这有助于在编译时期就发现潜在的类型错误，提高代码的可读性和可维护性。
 - **JavaScript**：JS是一种动态类型的语言，变量的类型是在运行时确定的，不需要显式声明变量的类型。
@@ -23,7 +25,7 @@ JavaScript 的类型系统非常弱，而且没有使用限制，运算符可以
 - 提供了代码文档
 - 有助于代码重构
 
-## 类型定义
+### 类型定义
 
 #### 基本类型
 
@@ -44,7 +46,7 @@ JavaScript 的类型系统非常弱，而且没有使用限制，运算符可以
 | `union`     | 联合类型，表示可以是多种类型之一 | `let id: string                                         |
 | `unknown`   | 不确定类型，需类型检查后再使用   | `let value: unknown = "Hello";`                         |
 
-**重点：为什么需要**`**any**`**和**`**unknow**`**类型**
+**重点：为什么需要**`any`**和**`unknow`**类型**
 
 1. any 用于当前变量允许任何类型，意味着关闭对这个变量的类型检查，这应该是你在无法确定类型时的最后选择。
 2. 应用场景
@@ -72,13 +74,13 @@ JavaScript 的类型系统非常弱，而且没有使用限制，运算符可以
 
 定长的数组。但使用元组可以帮助我们进一步提升**数组结构的严谨性**，包括基于位置的类型标注、避免出现越界访问等等。
 
-```
+```ts
 const arr1: [string, number ] = ['xiaohe', 18];
 
 console.log(arr1[599]); //长度为“2”的元组类型“[string, string, string]”在索引“599“处没有元素
 ```
 
-**对象类型**：
+**对象类型**：t
 
 ```typescript
 let person: { name: string; age: number } = { name: "Kimi", age: 30 };
@@ -127,7 +129,7 @@ let c: Color = Color.Green;
 
 在我们定一个 string 类型时，我们有时候会去访问`substring`方法，有没有想过为什么一个基本类型下面怎么挂载着属性和方法，其实这都归究于 ts 的装箱。
 
-```
+```ts
 var s1 = 'call_me_R'; // 隐式装箱
 var s2 = s1.substring(2);
 
@@ -143,11 +145,11 @@ var s2 = s1.substring(2);
 
 #### 内置工具类型
 
-##### 联合类型（｜）
+##### 1. 联合类型（｜）
 
 联合类型中是一种允许一个值可以是多种类型的类型系统特性，给项目带来了**灵活性**和**代码复用性**。
 
-```
+```ts
 type ProductType = 'Device' | 'Normal';
 
 function processColor(type: ProductType) {
@@ -160,7 +162,7 @@ function processColor(type: ProductType) {
 }
 ```
 
-##### 交叉类型（&）
+##### 2. 交叉类型（&）
 
 交叉类型允许你将多个类型合并为一个新类型，合理的使用它可以给代码带来它可以给代码带来清晰性和可读性。
 
@@ -168,7 +170,7 @@ function processColor(type: ProductType) {
 
 例如一个很常见的首页金刚位场景为例，前端需要在本地存一份菜单配置类型，但还需要通过后端接口拿到实时计算的进度描述信息、提醒数量等数据配置类型，最终将这**两个模块类型**合并在一起形成最终的结构体：
 
-```js
+```ts
 // 本地配置信息
 export interface BaseGoldEntryItemConfig {
   menuCode?: MenuCode;
@@ -207,7 +209,7 @@ export interface HomeMenuItem {
 export type GoldEntryItemConfig = HomeMenuItem & BaseGoldEntryItemConfig;
 ```
 
-##### 映射类型（in）
+##### 3. 映射类型（in）
 
 映射类型的主要作用即是**基于键名映射到键值类型**。通常与映射操作符（keyof、in、as const 等）、extends 、索引类型一起使用。
 
@@ -215,23 +217,23 @@ export type GoldEntryItemConfig = HomeMenuItem & BaseGoldEntryItemConfig;
 
 1. 对键名进行修饰
 
-```
+```ts
 type MyObject = { a: number; b: string; c: boolean };
 type MyObjectReadonly = { readonly [K in keyof MyObject]: MyObject[K] };
 ```
 
 2. 结合条件类型生成一个具有含义的新类型
 
-```
+```ts
 type IsString<T> = T extends string ? true : false;
 type MyStringType = { [K in keyof string]: IsString<T[K]> };
 ```
 
-##### 条件类型（extends）
+##### 4. 条件类型（extends）
 
 条件类型允许**基于类型系统中的类型条件来创建新类型**，使得类型可以根据某个条件来决定其最终的形式。这种类型的引入极大地增强了 TypeScript 表达力和类型安全性。
 
-```
+```ts
 import { ModalProps } from 'antd';
 
 type Pattern = 'add' | 'edit'
@@ -242,11 +244,11 @@ export interface AddOrEditModalProps<T extends Pattern> extends ModalProps {
 }
 ```
 
-##### 模版字符串类型
+##### 5. 模版字符串类型
 
 TypeScript 可以识别模版字符串语法，故有了模版字符串类型
 
-```
+```ts
 type Greet<T extends string | number | boolean | null | undefined | bigint> = `Hello ${T}`;
 
 // 对于模版字符串支持的范型只有 string | number | boolean | null | undefined | bigint

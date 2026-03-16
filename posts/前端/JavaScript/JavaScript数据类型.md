@@ -1,5 +1,5 @@
 ---
-title: 数据类型
+title: JavaScript数据类型
 date: 2024-10-22 15:27:04
 description: 笔记
 tags:
