@@ -21,7 +21,7 @@ NestJS 基于 Express、socket.io 封装的 nodejs 后端开发框架
 
 ```bash
 npm i -g @nestjs/cli
-nest new project-name
+nest new project-name ## nest new server --package-manager pnpm
 ```
 
 ### 运行应用程序
