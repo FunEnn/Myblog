@@ -817,19 +817,19 @@ console.log(gen.next()); // { value: 3, done: true }
 | undefined | 表示未定义                       | let undef: undefined = undefined;                     |
 | never     | 表示不会有返回值                 | function error(): never { throw new Error("error"); } |
 | object    | 表示非原始类型                   | let obj: object = { name: "Alice" };                  |
-| union     | 联合类型，表示可以是多种类型之一 | let id: string                                        |
+| union     | 联合类型，表示可以是多种类型之一 | `let id: string \| number`                            |
 | unknown   | 不确定类型，需类型检查后再使用   | let value: unknown = "Hello";                         |
 
 #### 泛型工具类型
 
 | 工具类型     | 逻辑                          | 典型应用场景                           |
 | ------------ | ----------------------------- | -------------------------------------- |
-| Partial<T>   | 将所有属性变为 可选           | 编辑表单时，只传修改过的字段           |
-| Required<T>  | 将所有属性变为 必选           | 确保配置对象中所有项都已填充           |
-| Readonly<T>  | 将所有属性变为 只读           | 防止在函数内部意外修改配置或 Props     |
-| Pick<T, K>   | 从 T 中 挑选 出 K 属性        | 从完整的用户信息中只取 id 和 name      |
-| Omit<T, K>   | 从 T 中 剔除 掉 K 属性        | 创建新数据时，剔除掉数据库自增的 id    |
-| Record<K, T> | 创建一个 键为 K 值为 T 的对象 | 定义对象映射（如错误代码与消息的映射） |
+| `Partial<T>`   | 将所有属性变为 可选           | 编辑表单时，只传修改过的字段           |
+| `Required<T>`  | 将所有属性变为 必选           | 确保配置对象中所有项都已填充           |
+| `Readonly<T>`  | 将所有属性变为 只读           | 防止在函数内部意外修改配置或 Props     |
+| `Pick<T, K>`   | 从 T 中 挑选 出 K 属性        | 从完整的用户信息中只取 id 和 name      |
+| `Omit<T, K>`   | 从 T 中 剔除 掉 K 属性        | 创建新数据时，剔除掉数据库自增的 id    |
+| `Record<K, T>` | 创建一个 键为 K 值为 T 的对象 | 定义对象映射（如错误代码与消息的映射） |
 
 #### 泛型
 
