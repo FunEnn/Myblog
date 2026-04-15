@@ -42,70 +42,79 @@ Q6: 透传是什么？
 ### 代码
 
 ```javascript
-class  MyPromise  {
+class MyPromise {
     constructor(executor) {
         this.state = 'pending';
         this.value = undefined;
         this.callbacks = [];
-        
+
         const resolve = (val) => {
             if(this.state !== 'pending') return;
-            this.state = ='fulfilled';
+            this.state = 'fulfilled';
             this.value = val;
             this.callbacks.forEach(cb => cb.onFulfilled());
         }
-        
-        const reject = (reason) => {
+
+        const reject = (val) => {
             if(this.state !== 'pending') return;
             this.state = 'rejected';
-            this.value = reason;
+            this.value = val;
             this.callbacks.forEach(cb => cb.onRejected());
         }
-        
+
         try {
             executor(resolve,reject);
         } catch (e) {
             reject(e);
         }
     }
-    
-    then(onFulfilled, onRejected) {
+
+    then(onFulfilled,onRejected) {
         onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
-        onRejected = typeof onRejected === 'function'  ? onRejected : e => { throw e }
-        
-        return new MyPromise((resolve,reject) => {
-            const handle =  (callback) => {
-                setTimeout(() => {
-                    try {
-                        const result = callback(this.value);
-                        result instanceof MyPromise ?  result.then(resolve,reject) : resolve(result);
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
-            };
-            
-            if(this.state === 'fulfilled') handle(onFulfilled);
-            else if(this.state === 'rejected') handle(onRejected);
-            else {
-                this.callbacks.push({
-                    onFulfilled: () => handle(onFulfilled);
-                    onRejected: () => handle(onRejected)
-                })
+        onRejected = typeof onRejected === 'function' ? onRejected : e => { throw e }
+
+        return new MyPromise((resolve, reject) => {
+            const handle = (callback) => {
+                try {
+                    const result = callback(this.value);
+                    result instanceof MyPromise ? result.then(resolve,reject) : resolve(result);
+                } catch (e) {
+                    reject(e)
+                }
             }
-        });
-        
-        catch(onRejected) {
-            return this.then(null, onRejected);
-        }
-       	static resolve(value) {
-            return value instanceof MyPromise ? value : new MyPromise(resolve => resolve(value));
-        }
-        static reject(reason) {
-   			return new MyPromise((_, reject) => reject(reason));
-        }
+
+            if(this.state === 'fulfilled') return setTimeout(() => handle(onFulfilled));
+            if(this.state === 'rejected') return setTimeout(() => handle(onRejected));
+
+            this.callbacks.push({
+                onFulfilled: () => setTimeout(() => handle(onFulfilled)),
+                onRejected: () => setTimeout(() => handle(onRejected))
+            })
+        })
+    }
+
+    catch(onRejected) {
+        return this.then(null,onRejected);
+    }
+
+    static resolve(v) {
+        return v instanceof MyPromise ? v : new MyPromise(r => r(v));
+    }
+    static reject(e) {
+        return new MyPromise((_,r) => r(e))
     }
 }
+
+//测试
+const p1 = new MyPromise((resolve,reject) => {
+    setTimeout(() => {
+        resolve('成功')
+    },1000)
+})
+
+p1.then(res => {
+    console.log('p1: ', res);
+})
 ```
 
 ## 2. Promise.all
@@ -187,7 +196,7 @@ Promise.myAny = function(promises) {
         
         arr.forEach((p,i) => {
             Promise.resolve(p).then(resolve, reason => {
-                errors[i] == reason;
+                errors[i] = reason;
                 rejected++;
                 if(rejected === arr.length) {
                     reject(new AggregateError([], 'All promises were rejected'))
